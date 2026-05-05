@@ -1765,10 +1765,13 @@ const catIcons = {
   Matspjälkning: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c0 4-3 4-3 8s3 4 3 8" fill="currentColor" opacity="0.0"/><path d="M12 4c0 4-3 4-3 8s3 4 3 8"/><path d="M12 20c0 2 1 4 4 6"/><path d="M20 8c1 2 1 5-2 7s-3 5-3 7"/><ellipse cx="19" cy="10" rx="3" ry="4" fill="currentColor" opacity="0.2"/></svg>',
   Andning: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v4"/><path d="M16 12c-5 0-9 3-9 8 0 3 2 5 5 5 0-3 2-5 4-5s4 2 4 5c3 0 5-2 5-5 0-5-4-8-9-8z" fill="currentColor" opacity="0.2"/><circle cx="11" cy="22" r="2"/><circle cx="21" cy="22" r="2"/></svg>',
   'Hjärtat och blodet': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 27s-12-7-12-15a7 7 0 0 1 12-5 7 7 0 0 1 12 5c0 8-12 15-12 15z" fill="currentColor" opacity="0.2"/><path d="M10 16h4l2-4 2 6 2-4h3"/></svg>',
-  Blodgrupper: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="22" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="16" cy="23" r="5" fill="currentColor" opacity="0.2"/><text x="8.5" y="15" font-size="6" fill="currentColor" stroke="none">A</text><text x="20" y="15" font-size="6" fill="currentColor" stroke="none">B</text><text x="14" y="26" font-size="5" fill="currentColor" stroke="none">AB</text></svg>'
+  Blodgrupper: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="22" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="16" cy="23" r="5" fill="currentColor" opacity="0.2"/><text x="8.5" y="15" font-size="6" fill="currentColor" stroke="none">A</text><text x="20" y="15" font-size="6" fill="currentColor" stroke="none">B</text><text x="14" y="26" font-size="5" fill="currentColor" stroke="none">AB</text></svg>',
+  'Blodets rening': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="16" rx="5" ry="8" fill="currentColor" opacity="0.2"/><ellipse cx="20" cy="16" rx="5" ry="8" fill="currentColor" opacity="0.2"/><path d="M12 8c0-3 8-3 8 0"/><path d="M16 6v-2M16 4l-2 1M16 4l2 1"/></svg>',
+  Blodtrycket: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10" fill="currentColor" opacity="0.1"/><path d="M8 16h3l2-5 4 10 3-7 2 2h3"/></svg>'
 };
 const catColors = { Fotosyntes:'#2d6a4f', Cellandning:'#c4502b', Kolhydrater:'#c8941e', Fetter:'#b86d3d', Proteiner:'#7d4ba0', Vitaminer:'#d4912a', Mineralämnen:'#4a6b8a',
-  Cellen:'#5b7fa6', Matspjälkning:'#b85c38', Andning:'#3a7d6e', 'Hjärtat och blodet':'#c0392b', Blodgrupper:'#7b4f9e' };
+  Cellen:'#5b7fa6', Matspjälkning:'#b85c38', Andning:'#3a7d6e', 'Hjärtat och blodet':'#c0392b', Blodgrupper:'#7b4f9e',
+  'Blodets rening':'#2e6b5e', Blodtrycket:'#8b2252' };
 
 const cheers = {
   reveal:  [
@@ -1835,7 +1838,7 @@ const DATA = {
       color: '#2d6a4f',
       description: 'Biologi, kemi och fysik för högstadiet.',
       topics: [
-        { id: 'manniskokroppen', name: 'Människokroppen', description: 'Cellen, matspjälkning, andning, hjärtat och blodomloppet, blodgrupper och blodets rening.', icon: '🫀', cardCount: 28, cards: getMkroppenCards() },
+        { id: 'manniskokroppen', name: 'Människokroppen', description: 'Cellen, matspjälkning, andning, hjärtat och blodomloppet, blodgrupper, blodtrycket och blodets rening.', icon: '🫀', cardCount: 48, cards: getMkroppenCards() },
         { id: 'livets-kemi', name: 'Livets kemi', description: 'Fotosyntes, cellandning, kolhydrater, fetter, proteiner, vitaminer och mineralämnen.', icon: '🧪', cardCount: 22, cards: getKemiCards() }
       ]
     }
@@ -2554,10 +2557,36 @@ function getMkroppenCards() {
     { type:'write', q:'Vad händer med blodets pH om vi håller andan?', a:'pH-värdet sjunker (blodet försuras)', keywords:[['sjunker','sänks','lägre','surare'],['försuras','sur']], cat:'Hjärtat och blodet' },
     { type:'flip', q:'Vad heter hjärtats fyra hålrum?', a:'Vänster förmak, vänster kammare, höger förmak och höger kammare.', cat:'Hjärtat och blodet' },
 
+    // === BLODETS FUNKTION OCH INNEHÅLL ===
+    { type:'flip', q:'Hur mycket blod har en vuxen människa?', a:'Mellan 4–6 liter blod.', cat:'Hjärtat och blodet' },
+    { type:'flip', q:'Vad består blodplasma av?', a:'Blodplasma är mer än hälften av blodet (ca 55%) och består av vatten, salt och näringsämnen.', cat:'Hjärtat och blodet' },
+    { type:'flip', q:'Vad är bloddopning?', a:'Att konstgjort öka mängden röda blodkroppar i blodet så att mer syre kan transporteras runt – vilket ger idrottsprestation.', cat:'Hjärtat och blodet' },
+    { type:'flip', q:'Vilka tre typer av vita blodkroppar finns det?', a:'Ätarceller (makrofager) som äter upp inkräktare, T-celler som känner igen främmande ämnen, och B-celler som producerar antikroppar.', cat:'Hjärtat och blodet' },
+    { type:'flip', q:'Vad händer steg för steg när vi skär oss i fingret?', a:'1. Blodkärl drar ihop sig. 2. Blodplättar klibbar ihop. 3. Proteintrådar (fibrin) bildar ett nät. 4. Röda blodkroppar fastnar i nätet. 5. En sårskroppa bildas.', cat:'Hjärtat och blodet' },
+    { type:'write', q:'Vad kallas proteintrådarnas nät som bildas vid sårläkning?', a:'Fibrin', keywords:[['fibrin']], cat:'Hjärtat och blodet' },
+    { type:'flip', q:'Varför är järn viktigt för röda blodkroppar?', a:'Hemoglobin innehåller järn – det är järnet som binder syre. Järnbrist leder till blodbrist (anemi) med trötthet och blekhet.', cat:'Hjärtat och blodet' },
+
+    // === BLODTRYCKET ===
+    { type:'flip', q:'Vad är blodtryck?', a:'Det tryck som uppstår i blodkärlen när hjärtat pumpar ut blodet i kroppen.', cat:'Blodtrycket' },
+    { type:'flip', q:'Vad räknas som normalt blodtryck?', a:'Under 140/90 mm Hg vid vila. Det högre värdet uppstår vid hjärtats sammandragning, det lägre när hjärtat vilar.', cat:'Blodtrycket' },
+    { type:'flip', q:'Vad räknas som lågt blodtryck och vilka symptom ger det?', a:'Under 90/60 mm Hg med symptom. Symptom: svimningskänsla, yr, kallsvettas, svag.', cat:'Blodtrycket' },
+    { type:'flip', q:'Vad räknas som högt blodtryck och vad riskerar man?', a:'Över 140/90 mm Hg. Ökad risk för hjärt-kärlsjukdomar, stroke, synförlust och njurproblem.', cat:'Blodtrycket' },
+    { type:'write', q:'Vilken enhet mäts blodtryck i?', a:'mm Hg', keywords:[['mm hg','mmhg','millimeter','kvicksilver']], cat:'Blodtrycket' },
+
+    // === BLODETS RENING ===
+    { type:'flip', q:'Vilka fyra uppgifter har levern?', a:'1. Rena blodet från skadliga ämnen. 2. Lagra glukos som glykogen. 3. Producera galla. 4. Lagra vitaminer (D, A, B12).', cat:'Blodets rening' },
+    { type:'flip', q:'Hur tar levern hand om nedbrytningsprodukter?', a:'De kan gå via gallan till tarmen och ut med avföringen, eller transporteras med blodet till njurarna.', cat:'Blodets rening' },
+    { type:'flip', q:'Vad är nefroner?', a:'Filterenheter i njurarna. I nefronerna filtreras blodet från avfallsprodukter och urin bildas som består av vatten och avfall.', cat:'Blodets rening' },
+    { type:'flip', q:'Vad är njurarnas tre uppgifter?', a:'1. Rena blodet från avfallsprodukter. 2. Tillverka urin. 3. Reglera vätskebalansen i kroppen.', cat:'Blodets rening' },
+    { type:'flip', q:'Vad händer med det renade blodet i njurarna?', a:'Det renade blodet förs tillbaka till blodomloppet. Urinet transporteras till urinblåsan och kissas sedan ut genom urinröret.', cat:'Blodets rening' },
+
     // === BLODGRUPPER ===
     { type:'flip', q:'Vad innebär ABO-systemet?', a:'Fyra blodgrupper (A, B, AB och 0) baserade på vilka antigener som sitter på de röda blodkropparna. Blodgrupperna kan inte alltid blandas.', cat:'Blodgrupper' },
     { type:'flip', q:'Vilka blodgrupper kan en person med blodgrupp B ta emot?', a:'Blodgrupp B och blodgrupp 0. Blodgrupp B har A-antikroppar och kan inte ta emot blod med A-antigener.', cat:'Blodgrupper' },
-    { type:'flip', q:'Hur renas blodet?', a:'I levern bryts giftiga ämnen ner. I njurarna filtreras blodet – gifter lämnar kroppen med urinen, och näring återförs till blodet.', cat:'Blodgrupper' }
+    { type:'flip', q:'Vad är antigener?', a:'Små proteiner som sitter på de röda blodkropparnas yta och skiljer blodgrupperna åt.', cat:'Blodgrupper' },
+    { type:'flip', q:'Vad är antikroppar i blodet?', a:'Ämnen i blodplasman som angriper ett visst typ av antigen. T.ex. har blodgrupp A antikroppar mot B-antigener.', cat:'Blodgrupper' },
+    { type:'write', q:'Vilken blodgrupp kan ta emot blod från alla andra grupper?', a:'AB', keywords:[['ab']], cat:'Blodgrupper' },
+    { type:'flip', q:'Vilka antigener och antikroppar har blodgrupp 0?', a:'Inga antigener på blodkropparna. Antikroppar mot både A- och B-antigener i plasma. Kan ge blod till alla.', cat:'Blodgrupper' }
   ];
 }
 
@@ -2581,7 +2610,11 @@ function getMkroppenQuizBank() {
       { q:'Var renas blodet i kroppen?', options:['I hjärtat och lungorna','I levern och njurarna','I magsäcken','I mjälten'], correct:1, explanation:'Levern bryter ner gifter och njurarna filtrerar blodet och bildar urin.', cat:'Blodgrupper' },
       { q:'Vad gör ribosomerna i cellen?', options:['Sköter cellandning','Tillverkar proteiner','Rensar avfall','Skyddar cellen'], correct:1, explanation:'Ribosomerna kallas cellens proteinfabriker – de bygger proteiner utifrån instruktioner från DNA.', cat:'Cellen' },
       { q:'Vad är diafragma?', options:['En typ av blodkropp','En lungblåsa','Den stora andningsmuskeln','En del av matstrupen'], correct:2, explanation:'Diafragman är den stora muskeln under lungorna som styr in- och utandning.', cat:'Andning' },
-      { q:'Vad stoppar blödningar i kroppen?', options:['Vita blodkroppar','Blodplättar','Röda blodkroppar','Hormonerna'], correct:1, explanation:'Blodplättar klibbar ihop vid sår och bildar en propp som stoppar blödningen.', cat:'Hjärtat och blodet' }
+      { q:'Vad stoppar blödningar i kroppen?', options:['Vita blodkroppar','Blodplättar','Röda blodkroppar','Hormonerna'], correct:1, explanation:'Blodplättar klibbar ihop vid sår och bildar en propp som stoppar blödningen.', cat:'Hjärtat och blodet' },
+      { q:'Hur mycket blod har en vuxen människa?', options:['1–2 liter','4–6 liter','8–10 liter','2–3 liter'], correct:1, explanation:'En vuxen människa har ca 4–6 liter blod – ungefär lika mycket som i en stor flaska.', cat:'Hjärtat och blodet' },
+      { q:'Vad är blodtryck?', options:['Hjärtats slagfrekvens','Trycket i blodkärlen när hjärtat pumpar','Mängden syre i blodet','Blodets färg'], correct:1, explanation:'Blodtrycket uppstår när hjärtat pumpar ut blodet i kärlen. Det mäts i mm Hg och har ett övre och ett undre värde.', cat:'Blodtrycket' },
+      { q:'Vilka ämnen kan levern bryta ner?', options:['Syre och koldioxid','Alkohol och läkemedel','Socker och stärkelse','Vitaminer och mineraler'], correct:1, explanation:'Levern har enzymer som bryter ner skadliga ämnen som alkohol och läkemedel till mindre farliga former.', cat:'Blodets rening' },
+      { q:'Vad tillverkar njurarna?', options:['Galla','Blodkroppar','Urin','Enzymer'], correct:2, explanation:'Njurarna filtrerar blodet och bildar urin av avfallsprodukter. Urinet lagras i urinblåsan.', cat:'Blodets rening' }
     ],
     medium: [
       { q:'Varför kan tunntarmen ta upp näring effektivt trots sin korta längd?', options:['Den är mycket varm','Tarmludden ökar ytan till tennisplanstorlek','Den innehåller extra enzymer','Magsyran hjälper till'], correct:1, explanation:'Tarmluddens veck och hårliknande utskott gör att tunntarmens yta blir enorm – svarar mot ca en tennisplan.', cat:'Matspjälkning' },
@@ -2598,7 +2631,11 @@ function getMkroppenQuizBank() {
       { q:'Vad innehåller bukspottet som töms i tolvfingertarmen?', options:['Galla och saltsyra','Enzymer och basiska ämnen som neutraliserar magsyran','Slem och vatten','Hemoglobin'], correct:1, explanation:'Bukspottet innehåller enzymer som bryter ner alla tre typer av näring, och basiska ämnen som neutraliserar magsyran.', cat:'Matspjälkning' },
       { q:'Vilken blodgrupp kan ta emot blod från alla?', options:['O','A','B','AB'], correct:3, explanation:'AB kallas universell mottagare – den saknar antikroppar mot A- och B-antigener.', cat:'Blodgrupper' },
       { q:'Vad gör hjärtats klaffar?', options:['Pumpar blodet aktivt','Hindrar blodet från att rinna åt fel håll','Styr hjärtrytmen','Öppnar sig vid stressl'], correct:1, explanation:'Segelklaffar och fickklaffar fungerar som ventiler och säkerställer att blodet alltid flödar åt rätt håll.', cat:'Hjärtat och blodet' },
-      { q:'Vad är cellandning?', options:['Att vi andas luft in och ut','Förbränning av glukos i mitokondrerna som frigör energi','Syrets färd från lungorna till blodet','Proteinernas bildning i ribosomerna'], correct:1, explanation:'Cellandning är den kemiska process i mitokondrerna: glukos + syre → koldioxid + vatten + energi.', cat:'Cellen' }
+      { q:'Vad är cellandning?', options:['Att vi andas luft in och ut','Förbränning av glukos i mitokondrerna som frigör energi','Syrets färd från lungorna till blodet','Proteinernas bildning i ribosomerna'], correct:1, explanation:'Cellandning är den kemiska process i mitokondrerna: glukos + syre → koldioxid + vatten + energi.', cat:'Cellen' },
+      { q:'Vad händer steg 1 när du skär dig i fingret?', options:['Blodplättar klibbar ihop','Blodkärlet drar ihop sig','Fibrin bildas','En sårskroppa bildas'], correct:1, explanation:'Steg 1: Blodkärlet drar ihop sig (vasokonstriktion) för att minska blödningen. Sedan klibbar blodplättar ihop och fibrin bildar ett nät.', cat:'Hjärtat och blodet' },
+      { q:'Vilket blodtryck räknas som högt?', options:['Under 90/60','Exakt 120/80','Över 140/90','Exakt 100/70'], correct:2, explanation:'Blodtryck över 140/90 mm Hg räknas som högt (hypertoni) och ökar risken för stroke och hjärtattack.', cat:'Blodtrycket' },
+      { q:'Vad lagrar levern som reservenergi?', options:['Fett','Glykogen','Protein','Vitaminer'], correct:1, explanation:'Levern lagrar glukos i form av glykogen. När kroppen behöver energi snabbt bryter levern ner glykogenet till glukos igen.', cat:'Blodets rening' },
+      { q:'Vad är nefroner?', options:['Blodkärl i levern','Filterenheter i njurarna','Enzymer som rensar gifter','Vita blodkroppar i njurarna'], correct:1, explanation:'Nefroner är njurarnas filterenheter. I dem filtreras blodet och urin bildas av avfallsprodukter. En njure har ungefär en miljon nefroner!', cat:'Blodets rening' }
     ],
     hard: [
       { q:'En person med blodgrupp B har A-antikroppar. Varför kan hen inte ta emot blod från blodgrupp AB?', options:['AB-blod innehåller A-antigener som A-antikropparna attackerar','AB-blod är för tjockt','AB-blod innehåller för mycket koldioxid','AB-blod saknar blodplättar'], correct:0, explanation:'Antikropparna i mottagarens blod attackerar antigener de känner igen som "främmande". B-blodets A-antikroppar reagerar mot A-antigener i AB-blodet.', cat:'Blodgrupper' },
@@ -2645,7 +2682,18 @@ function getMkroppenLucktext() {
     { text:'Njurarna filtrerar blodet och gifter lämnar kroppen med [urinen].', answers:['urinen','urin'], hint:'Den vätskan vi producerar i blåsan', explain:'Njurarna filtrerar mer än 1 liter blod per minut. Gifter och avfall hamnar i urinen; nyttiga ämnen som glukos återresorberas till blodet.' },
     { text:'Levern bryter ner giftiga ämnen och kan också lagra glukos som [glykogen].', answers:['glykogen'], hint:'Det är reservformen av socker', explain:'Levern fungerar som kroppens kemifabrik och lager. Den lagrar glykogen (glukos i kedjor) och bryter ner det när kroppen behöver energi snabbt.' },
     { text:'Celldelning gör att en cell delar sig och bildar [två] likadana celler.', answers:['två','2'], hint:'Det är ett enkelt siffersvar', explain:'Vid celldelning kopieras allt DNA och cellen delar sig på mitten. Varje dygn dör och ersätts mer än ett kilo celler i kroppen.' },
-    { text:'Blodplättar hjälper till att stoppa blödningar genom att klibba ihop och bilda en [propp].', answers:['propp'], hint:'De tätar skadan', explain:'Vid ett sår drar blodkärlet ihop sig, blodplättarna klibbar samman och ett nätverk av fibrin fångar röda blodkroppar – tillsammans bildar de en sårpropp.' }
+    { text:'Blodplättar hjälper till att stoppa blödningar genom att klibba ihop och bilda en [propp].', answers:['propp'], hint:'De tätar skadan', explain:'Vid ett sår drar blodkärlet ihop sig, blodplättarna klibbar samman och ett nätverk av fibrin fångar röda blodkroppar – tillsammans bildar de en sårpropp.' },
+    { text:'En vuxen människa har mellan 4 och [6] liter blod.', answers:['6','sex'], hint:'Tänk hur många literflaskor det vore', explain:'Mängden blod varierar med kroppsstorlek, men 4–6 liter är normalt för en vuxen. Blodet fyller ett helt system av blodkärl som är miltals långa.' },
+    { text:'Mer än hälften av blodet är [blodplasma] – en vätska med vatten, salt och näringsämnen.', answers:['blodplasma','plasma'], hint:'Det gula/klara i blodet', explain:'Blodplasma utgör ca 55% av blodet. Resten (45%) är blodkroppar. Plasmat transporterar näring, hormoner och avfallsprodukter.' },
+    { text:'Hemoglobin innehåller [järn] – därför är det viktigt att äta järnrik mat!', answers:['järn'], hint:'Ett mineral som finns i kött och bönor', explain:'Järnet i hemoglobin är det som binder syremolekylerna. Järnbrist leder till blodbrist (anemi) med symptom som trötthet, blekhet och andfåddhet.' },
+    { text:'Idrottsmän kan träna på hög höjd för att öka mängden röda blodkroppar – det kallas naturlig [bloddopning].', answers:['bloddopning'], hint:'En metod att förbättra syretransporten', explain:'På hög höjd är luften tunnare och kroppen reagerar med att bilda fler röda blodkroppar. Mer röda blodkroppar = mer syre kan transporteras = bättre uthållighet.' },
+    { text:'Det som skiljer blodgrupperna åt är små proteiner som kallas [antigener].', answers:['antigener'], hint:'De sitter på blodkropparnas yta', explain:'Antigener är proteinmarkörer på röda blodkroppars yta. Blodgrupp A har A-antigener, B har B-antigener, AB har båda och 0 har inga.' },
+    { text:'I blodet finns [antikroppar] som angriper en viss typ av antigen.', answers:['antikroppar'], hint:'De är immunsystemets vapen mot fel blod', explain:'Antikroppar i plasman reagerar mot antigener de inte känner igen. Blodgrupp B har t.ex. Anti-A antikroppar som attackerar A-antigener.' },
+    { text:'Blodtrycket är det tryck som uppstår i blodkärlen när hjärtat [pumpar] ut blodet.', answers:['pumpar'], hint:'Hjärtat är en muskel som…', explain:'Varje gång hjärtat drar ihop sig skapas ett tryck i blodkärlen. Det högre värdet (t.ex. 120) mäts vid sammandragning, det lägre (t.ex. 80) vid vila.' },
+    { text:'Högt blodtryck räknas som över [140]/90 mm Hg och ökar risken för hjärtattack och stroke.', answers:['140'], hint:'Ett av gränsvärdet för högt blodtryck', explain:'Högt blodtryck (hypertoni) belastar blodkärlens väggar och kan leda till ateroskleros, stroke, hjärtattack och njurskador.' },
+    { text:'I levern finns [enzymer] som kan bryta ner skadliga ämnen som alkohol och läkemedel.', answers:['enzymer'], hint:'Proteiner som påskyndar kemiska reaktioner', explain:'Leverns enzymer omvandlar giftiga ämnen till mindre farliga ämnen som sedan kan transporteras vidare till njurarna eller lämna via gallan.' },
+    { text:'Levern lagrar vitaminer som D-vitamin, A-vitamin och [B12]-vitamin.', answers:['b12','b12-vitamin','b-12'], hint:'Det vitamin som är extra viktigt för blodbildning', explain:'Levern fungerar som ett vitaminlager. B12 är viktigt för blodbildning, D-vitamin för skelettet och A-vitamin för synen. Dessa lagras och kan räcka i månader.' },
+    { text:'I njurarna finns filterenheter som kallas [nefroner].', answers:['nefroner'], hint:'Njurens minsta filterenhet', explain:'En njure innehåller ungefär en miljon nefroner! Varje nefron filtrerar blodet, och det renade blodet förs tillbaka till kroppen medan avfall bildar urin.' }
   ];
 }
 
@@ -2693,6 +2741,30 @@ function getMkroppenKopplingar() {
       ['Blodplasma','Trögflytande vätska som bär blodkropparna'],
       ['Blodgrupp O','Universell givare – kan ge blod till alla'],
       ['Blodgrupp AB','Universell mottagare – kan ta emot från alla']
+    ]},
+    { cat:'Blodgrupper och immun', pairs:[
+      ['Antigen','Litet protein på blodkropparnas yta som skiljer blodgrupper åt'],
+      ['Antikropp','Ämne i plasma som angriper "fel" antigener'],
+      ['Blodgrupp A','Har A-antigener och Anti-B antikroppar'],
+      ['Blodgrupp B','Har B-antigener och Anti-A antikroppar'],
+      ['Makrofager','Ätarceller – äter upp inkräktare och döda celler'],
+      ['B-celler','Vita blodkroppar som producerar antikroppar']
+    ]},
+    { cat:'Blodtrycket', pairs:[
+      ['Blodtryck','Trycket i blodkärlen när hjärtat pumpar'],
+      ['mm Hg','Enheten blodtryck mäts i'],
+      ['140/90','Gräns för högt blodtryck'],
+      ['90/60','Gräns för lågt blodtryck (med symptom)'],
+      ['Stroke','Risk vid högt blodtryck – blodpropp i hjärnan'],
+      ['Svimningskänsla','Symptom vid lågt blodtryck']
+    ]},
+    { cat:'Lever och njurar', pairs:[
+      ['Levern','Bryter ner gifter, lagrar glykogen och producerar galla'],
+      ['Njurarna','Filtrerar blodet, tillverkar urin, reglerar vätskebalansen'],
+      ['Nefroner','Njurarnas filterenheter'],
+      ['Glykogen','Glukos lagrat i levern som reservenergi'],
+      ['Urinblåsan','Samlar urinen tills den kissas ut'],
+      ['Gallblåsan','Lagrar galla som producerats i levern']
     ]}
   ];
 }
@@ -2720,7 +2792,15 @@ function getMkroppenInstudering() {
     { cat:'Hjärtat och blodomloppet', q:'Hur kan blodets pH-värde ändras om vi håller andan? Förklara också varför.', a:'Blodets pH-värde kan sänkas om vi håller andan. Det beror på att förbränningen i cellerna fortgår och producerar koldioxid. När vi inte kan andas ut koldioxid löses den i blodet och bildar kolsyra, som sänker pH.' },
     { cat:'Blodgrupper och blodets rening', q:'Vad innebär AB0-systemet?', a:'Det innebär att vi har fyra olika blodgrupper: A, B, AB och 0. De skiljer sig åt genom vilka antigener som sitter på de röda blodkropparna. I blodplasman kan det också finnas antikroppar som reagerar mot "fel" antigener.' },
     { cat:'Blodgrupper och blodets rening', q:'En person med blodgrupp B behöver blod. Från vilka blodgrupper kan den personen ta emot blod?', a:'En person med blodgrupp B har B-antigener och A-antikroppar. Det innebär att personen inte kan ta emot blod med A-antigener. Personen kan ta emot blod från blodgrupp B eller blodgrupp 0.' },
-    { cat:'Blodgrupper och blodets rening', q:'Hur renas blodet?', a:'Blodet renas i levern och njurarna. I levern finns enzymer som bryter ner giftiga ämnen. I njurarna filtreras blodet – gifter lämnar kroppen med urinen och näring återförs till blodet.' }
+    { cat:'Blodgrupper och blodets rening', q:'Hur renas blodet?', a:'Blodet renas i levern och njurarna. I levern finns enzymer som bryter ner giftiga ämnen. I njurarna filtreras blodet – gifter lämnar kroppen med urinen och näring återförs till blodet.' },
+    { cat:'Blodets funktion och innehåll', q:'Vilka uppgifter har blodet i kroppen?', a:'Blodet transporterar syre till cellerna, koldioxid till lungorna, och näringsämnen och restprodukter till och från cellerna. Det ingår i immunförsvaret, reglerar kroppstemperaturen och ser till att blodet levrar sig om ett blodkärl är skadat.' },
+    { cat:'Blodets funktion och innehåll', q:'Vad innehåller blodet?', a:'Blodet består till ca 55% av blodplasma (vätska med vatten, salt och näringsämnen) och till ca 45% av blodkroppar (röda blodkroppar, vita blodkroppar och blodplättar). Blodkroppar bildas från blodstamceller i benmärgen.' },
+    { cat:'Blodets funktion och innehåll', q:'Vad är hemoglobin och varför behövs järn?', a:'Hemoglobin är ett protein i röda blodkroppar som binder och transporterar syre. Hemoglobin innehåller järn – det är järnet som binder syret. Järnbrist leder till blodbrist (anemi) med symptom som trötthet och blekhet.' },
+    { cat:'Blodets funktion och innehåll', q:'Beskriv hur kroppen stoppar en blödning (sårläkning).', a:'1. Blodkärlet drar ihop sig och minskar blödningen. 2. Blodplättar klibbar ihop vid skadan. 3. Proteintrådar (fibrin) bildas som ett nät. 4. Röda blodkroppar fastnar i nätet. 5. Utanpå såret bildas en sårskroppa av blodplättar och torkade röda blodkroppar.' },
+    { cat:'Blodomlopp och blodtrycket', q:'Vad är blodtrycket?', a:'Blodtrycket är det tryck som uppstår i blodkärlen när hjärtat pumpar ut blodet i kroppen. Det mäts i mm Hg. Det högre värdet uppstår vid hjärtats sammandragning och det lägre när hjärtat vilar.' },
+    { cat:'Blodomlopp och blodtrycket', q:'Vad är normalt, högt och lågt blodtryck?', a:'Normalt blodtryck är under 140/90 mm Hg vid vila. Högt blodtryck är över 140/90 – ökar risken för hjärt-kärlsjukdomar och stroke. Lågt blodtryck är under 90/60 med symptom (svimningskänsla, yr, kallsvettas, svag).' },
+    { cat:'Blodets rening', q:'Vilka är leverns fyra huvudsakliga funktioner?', a:'1. Rena blodet från skadliga ämnen (enzymer bryter ner t.ex. alkohol och läkemedel). 2. Lagra glukos i form av glykogen. 3. Producera galla som lagras i gallblåsan. 4. Lagra vitaminer som D-vitamin, A-vitamin och B12.' },
+    { cat:'Blodets rening', q:'Hur fungerar njurarna?', a:'I njurarna finns nefroner. I nefronerna filtreras blodet från avfallsprodukter och urin bildas som består av vatten och avfall. Det renade blodet förs tillbaka till blodomloppet. Urinet transporteras till urinblåsan och kissas ut genom urinröret.' }
   ];
 }
 
@@ -2738,7 +2818,10 @@ function getMkroppenSkrivfragor() {
     { q:'Vad händer med koldioxid i kroppen om vi håller andan? Förklara kemiskt.', keywords:['koldioxid','kolsyra','pH','blodet','försuras','andas ut'], topic:'Andning' },
     { q:'Beskriv hur njurarna och levern rensar blodet.', keywords:['levern','njurarna','gifter','urin','filtrera','glukos'], topic:'Blodgrupper och blodets rening' },
     { q:'Varför har tunntarmen tarmludd och varför är det viktigt?', keywords:['tarmludd','yta','blodkärl','kapillärer','näring','tennisplan'], topic:'Matspjälkning' },
-    { q:'Beskriv cellens delar och deras funktioner som om du förklarar för en kompis.', keywords:['cellkärna','mitokondrie','ribosom','lysosom','cellmembran','DNA'], topic:'Cellen' }
+    { q:'Beskriv cellens delar och deras funktioner som om du förklarar för en kompis.', keywords:['cellkärna','mitokondrie','ribosom','lysosom','cellmembran','DNA'], topic:'Cellen' },
+    { q:'Vad är blodtryck och vad är skillnaden mellan högt och lågt blodtryck? Vilka risker finns?', keywords:['blodtryck','mm Hg','högt','lågt','stroke','hjärtattack','svimning'], topic:'Blodtrycket' },
+    { q:'Förklara vad röda blodkroppar gör och varför järn är viktigt för dem.', keywords:['hemoglobin','järn','syre','blodkroppar','anemi','blodbrist'], topic:'Blodets funktion och innehåll' },
+    { q:'Beskriv steg för steg vad som händer när du skär dig i fingret och kroppen läker såret.', keywords:['blodkärl','blodplättar','fibrin','propp','sårskroppa','koagulerar'], topic:'Blodets funktion och innehåll' }
   ];
 }
 
@@ -3415,6 +3498,10 @@ const PALATS_DATA = {
     { id:'mk-mats', icon:'🫁', name:'Matspjälkning', color:'#b85c38', bg:'#f5e3d6', terms:[{w:'Tolvfingertarmen',d:'Tar emot galla och bukspott – fortsatt nedbrytning'},{w:'Tunntarmen',d:'Tar upp näring via tarmludden – tennis­plans­stor yta'},{w:'Tjocktarmen',d:'Tar upp vatten och salter'},{w:'Galla',d:'Finfördela fett – bildas i levern'},{w:'Enzymer',d:'Saxar som klipper isär stora molekyler'}], link:'Munnen → magsäck → tolvfingertarm → tunntarm → tjocktarm → ändtarm' },
     { id:'mk-and', icon:'💨', name:'Andning', color:'#3a7d6e', bg:'#d9f0eb', terms:[{w:'Lungblåsor (alveoler)',d:'Platsen för gasutbyte – syre in, CO₂ ut'},{w:'Kapillärer',d:'Tunna blodkärl runt lungblåsorna'},{w:'Diafragma',d:'Stor andningsmuskel – suger in/pressar ut luft'},{w:'Diffusion',d:'Gaser rör sig från högt till lågt tryck'}], link:'Cellandning kräver syre → lungor tar in O₂ → CO₂ måste ut för att blodet inte ska bli surt' },
     { id:'mk-hjart', icon:'🫀', name:'Hjärtat & blodet', color:'#c0392b', bg:'#f9e0de', terms:[{w:'Lilla kretsloppet',d:'Hjärta ↔ lungor – blodet syresätts'},{w:'Stora kretsloppet',d:'Hjärta ↔ kroppen – syre levereras'},{w:'Röda blodkroppar',d:'Fraktar syre via hemoglobin'},{w:'Muskelpumpen',d:'Benmuskler pressar blod uppåt i venerna'},{w:'Aortan',d:'Kroppens största artär – lämnar vänster kammare'}], link:'Hjärtat = pumpen. Artärer = ut. Vener = in. Kapillärer = utbytet.' },
+    { id:'mk-blod', icon:'🩸', name:'Blodets innehåll', color:'#a93226', bg:'#fce8e6', terms:[{w:'Blodplasma (55%)',d:'Vätska med vatten, salt och näringsämnen'},{w:'Blodkroppar (45%)',d:'Röda, vita och blodplättar – bildas i benmärgen'},{w:'Hemoglobin',d:'Protein i röda blodkroppar som binder syre – innehåller järn'},{w:'Vita blodkroppar',d:'Immunförsvar – makrofager, T-celler, B-celler'},{w:'Fibrin',d:'Proteintrådar som bildar ett nät och täpper sår'}], link:'Blod = plasma + blodkroppar. Syre bunden till hemoglobin i röda blodkroppar.' },
+    { id:'mk-blodgrupp', icon:'🔬', name:'Blodgrupper', color:'#7b4f9e', bg:'#f0e8f8', terms:[{w:'Antigen',d:'Litet protein på röda blodkroppar – skiljer blodgrupper åt'},{w:'Antikropp',d:'Angriper "fel" antigener – finns i blodplasman'},{w:'Blodgrupp O',d:'Inga antigener – kan ge blod till alla (universell givare)'},{w:'Blodgrupp AB',d:'Båda antigenerna – kan ta emot från alla (universell mottagare)'}], link:'Regel: antikroppar attackerar antigener de inte känner igen. Felmatchning = farlig reaktion.' },
+    { id:'mk-rening', icon:'🫘', name:'Lever & njurar', color:'#2e6b5e', bg:'#d8f0eb', terms:[{w:'Leverns 4 uppgifter',d:'Rena blod, lagra glykogen, producera galla, lagra vitaminer'},{w:'Njurarnas 3 uppgifter',d:'Rena blodet, tillverka urin, reglera vätskebalansen'},{w:'Nefroner',d:'Njurarnas filterenheter – filtrerar blodet'},{w:'Glykogen',d:'Lagrad glukos i levern – snabb energireserv'}], link:'Levern = kemifabrik. Njurarna = reningsverk. Båda rensar blodet men på olika sätt.' },
+    { id:'mk-blodtryck', icon:'💓', name:'Blodtrycket', color:'#8b2252', bg:'#f5e0ec', terms:[{w:'Blodtryck',d:'Trycket i blodkärlen när hjärtat pumpar – mäts i mm Hg'},{w:'Normalt',d:'Under 140/90 mm Hg'},{w:'Högt (>140/90)',d:'Risk för stroke, hjärtattack, njurproblem'},{w:'Lågt (<90/60)',d:'Symptom: svimningskänsla, yr, kallsvettas, svag'}], link:'Högt tryck = sliter på kärlen. Lågt tryck = hjärnan får för lite blod.' },
   ],
 };
 
