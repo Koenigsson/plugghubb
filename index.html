@@ -719,6 +719,41 @@ body::before {
 .topics-desc { font-size: 15px; color: var(--ink2); max-width: 480px; line-height: 1.65; margin-bottom: 40px; }
 .topics-grid { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 680px; margin: 0 auto; }
 .topic-card { background: var(--cream); border: 1px solid var(--line); padding: 28px 24px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+.topic-xp-badge { position:absolute; top:16px; right:16px; width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,var(--xp),#a855f7); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(124,77,255,.28); z-index:3; pointer-events:none; }
+.topic-xp-badge-num { font-family:'Playfair Display',serif; font-size:13px; font-weight:900; color:white; line-height:1; }
+.topic-xp-badge-label { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.8); line-height:1; margin-top:2px; }
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xp), #a855f7);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  box-shadow: 0 2px 10px rgba(124,77,255,0.28);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.topic-xp-badge.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.topic-xp-badge-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 12px; font-weight: 900;
+  color: white;
+  line-height: 1;
+}
+.topic-xp-badge-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 7px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  line-height: 1;
+  margin-top: 1px;
+}
 .topic-card::after { content: attr(data-icon); position: absolute; right: -10px; bottom: -10px; font-size: 64px; opacity: 0.06; pointer-events: none; transition: opacity 0.2s, transform 0.3s; transform: rotate(-10deg); }
 .topic-card:hover::after { opacity: 0.12; transform: rotate(-5deg) scale(1.1); }
 .topic-card:hover { background: white; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(24,23,15,0.08); z-index: 2; }
@@ -1562,7 +1597,8 @@ function loadXP() {
     sessions: 0,
     quizzesDone: 0,
     perfectQuizzes: 0,
-    unlockedAchievements: []
+    unlockedAchievements: [],
+    topicXP: {}
   };
 }
 
@@ -1593,6 +1629,11 @@ function awardXP(amount, reason) {
   const before = getLevelData(XP.totalXP);
   XP.totalXP += amount;
   XP.level = getLevelData(XP.totalXP).current.level;
+  // Tagga XP per topic om ett topic är aktivt
+  if (currentTopic) {
+    if (!XP.topicXP) XP.topicXP = {};
+    XP.topicXP[currentTopic.id] = (XP.topicXP[currentTopic.id] || 0) + amount;
+  }
   saveXP(XP);
 
   showXPToast('+' + amount + ' XP');
@@ -1984,7 +2025,15 @@ function showSubject(subjectId) {
       ? 'background:var(--paper2);color:var(--ink3);border-color:var(--line);opacity:.65;cursor:not-allowed;'
       : '';
 
+    const topicXp = (XP.topicXP && XP.topicXP[topic.id]) || 0;
+    const xpDisplay = topicXp >= 1000 ? Math.round(topicXp/100)/10+'k' : topicXp;
+    const xpBadge = `<div class="topic-xp-badge visible">
+           <div class="topic-xp-badge-num">${xpDisplay}</div>
+           <div class="topic-xp-badge-label">XP</div>
+         </div>`;
+
     card.innerHTML = `
+      ${xpBadge}
       <div class="topic-icon-wrap">${topic.icon}</div>
       <div class="topic-name">${topic.name}</div>
       <div class="topic-desc">${topic.description}</div>
