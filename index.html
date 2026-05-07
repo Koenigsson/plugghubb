@@ -719,41 +719,6 @@ body::before {
 .topics-desc { font-size: 15px; color: var(--ink2); max-width: 480px; line-height: 1.65; margin-bottom: 40px; }
 .topics-grid { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 680px; margin: 0 auto; }
 .topic-card { background: var(--cream); border: 1px solid var(--line); padding: 28px 24px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
-.topic-xp-badge { position:absolute; top:16px; right:16px; width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,var(--xp),#a855f7); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(124,77,255,.28); z-index:3; pointer-events:none; }
-.topic-xp-badge-num { font-family:'Playfair Display',serif; font-size:13px; font-weight:900; color:white; line-height:1; }
-.topic-xp-badge-label { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.8); line-height:1; margin-top:2px; }
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 46px; height: 46px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--xp), #a855f7);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  box-shadow: 0 2px 10px rgba(124,77,255,0.28);
-  z-index: 3;
-  pointer-events: none;
-  opacity: 0;
-  transform: scale(0.7);
-  transition: opacity 0.3s, transform 0.3s;
-}
-.topic-xp-badge.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-.topic-xp-badge-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 12px; font-weight: 900;
-  color: white;
-  line-height: 1;
-}
-.topic-xp-badge-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 7px; letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.75);
-  line-height: 1;
-  margin-top: 1px;
-}
 .topic-card::after { content: attr(data-icon); position: absolute; right: -10px; bottom: -10px; font-size: 64px; opacity: 0.06; pointer-events: none; transition: opacity 0.2s, transform 0.3s; transform: rotate(-10deg); }
 .topic-card:hover::after { opacity: 0.12; transform: rotate(-5deg) scale(1.1); }
 .topic-card:hover { background: white; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(24,23,15,0.08); z-index: 2; }
@@ -1597,8 +1562,7 @@ function loadXP() {
     sessions: 0,
     quizzesDone: 0,
     perfectQuizzes: 0,
-    unlockedAchievements: [],
-    topicXP: {}
+    unlockedAchievements: []
   };
 }
 
@@ -1629,11 +1593,6 @@ function awardXP(amount, reason) {
   const before = getLevelData(XP.totalXP);
   XP.totalXP += amount;
   XP.level = getLevelData(XP.totalXP).current.level;
-  // Tagga XP per topic om ett topic är aktivt
-  if (currentTopic) {
-    if (!XP.topicXP) XP.topicXP = {};
-    XP.topicXP[currentTopic.id] = (XP.topicXP[currentTopic.id] || 0) + amount;
-  }
   saveXP(XP);
 
   showXPToast('+' + amount + ' XP');
@@ -1795,6 +1754,17 @@ function resetXP() {
    CARD DATA
 ═══════════════════════════════════════════════════════ */
 const catIcons = {
+  'Identitetsbegreppet': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="5"/><path d="M6 28c0-5.5 4.5-10 10-10s10 4.5 10 10"/><path d="M16 15v4"/></svg>',
+  'Normer och integritet': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="4" width="16" height="20" rx="2"/><path d="M12 10h8M12 14h8M12 18h5"/><path d="M6 8l2 2-4 4"/></svg>',
+  'Självkänsla': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28s-10-7-10-14a7 7 0 0114 0 7 7 0 0114 0c0 7-10 14-10 14h-8z" stroke-width="1.4"/></svg>',
+  'Identitetskris': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5v10M16 19v2"/><circle cx="16" cy="24" r="1.5" fill="currentColor"/><path d="M7 27l9-22 9 22H7z"/></svg>',
+  'Kön och könsidentitet': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><path d="M16.2 7.8L24 0M20 0h4v4"/><circle cx="20" cy="22" r="6"/><path d="M20 16v-3M17 22h6"/></svg>',
+  'Sexualitet': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6c0 0-8 4-8 11a8 8 0 0016 0C24 10 16 6 16 6z"/><path d="M13 20c0 2 1.5 3.5 3 3.5"/></svg>',
+  'Jämställdhet': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16h24M16 4l-8 12h16L16 4zM16 28l-8-12h16L16 28z"/></svg>',
+  'Livssyn': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10"/><path d="M16 6v4M16 22v4M6 16h4M22 16h4"/><circle cx="16" cy="16" r="4"/></svg>',
+  'Kläder och utseende': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-6 6 4 2v16h16V12l4-2-6-6c0 0-2 4-6 4S10 4 10 4z"/></svg>',
+  'Utseendenormer': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="20" height="26" rx="2"/><path d="M10 13h12M10 17h8M16 22l2 2 4-4"/></svg>',
+  'Mode och historia': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10"/><path d="M16 8v8l5 3"/></svg>',
   Fotosyntes:   '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="8" r="3" fill="currentColor" opacity="0.25"/><path d="M24 4v1.5M24 10.5v1.5M27.5 8h-1.5M22 8h-1.5"/><path d="M16 28V14"/><path d="M16 18c0-3 2-6 5-6 0 4-2 6-5 6z" fill="currentColor" opacity="0.2"/><path d="M16 22c0-3-2-6-5-6 0 4 2 6 5 6z" fill="currentColor" opacity="0.2"/></svg>',
   Cellandning:  '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6c-2 2-4 6-4 10s2 8 4 10c1-2 2-4 2-6s-1-4-2-6c1-2 2-4 2-6s-1-4-2-6z" fill="currentColor" opacity="0.18"/><path d="M22 6c2 2 4 6 4 10s-2 8-4 10c-1-2-2-4-2-6s1-4 2-6c-1-2-2-4-2-6s1-4 2-6z" fill="currentColor" opacity="0.18"/><path d="M16 4v24M14 16h4"/></svg>',
   Kolhydrater:  '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="11" r="4" fill="currentColor" opacity="0.2"/><circle cx="20" cy="9" r="4" fill="currentColor" opacity="0.2"/><circle cx="14" cy="22" r="4" fill="currentColor" opacity="0.2"/><path d="M13 11l3-1M11 14l2 5M22 12l1 5"/></svg>',
@@ -1806,13 +1776,14 @@ const catIcons = {
   Matspjälkning: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c0 4-3 4-3 8s3 4 3 8" fill="currentColor" opacity="0.0"/><path d="M12 4c0 4-3 4-3 8s3 4 3 8"/><path d="M12 20c0 2 1 4 4 6"/><path d="M20 8c1 2 1 5-2 7s-3 5-3 7"/><ellipse cx="19" cy="10" rx="3" ry="4" fill="currentColor" opacity="0.2"/></svg>',
   Andning: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v4"/><path d="M16 12c-5 0-9 3-9 8 0 3 2 5 5 5 0-3 2-5 4-5s4 2 4 5c3 0 5-2 5-5 0-5-4-8-9-8z" fill="currentColor" opacity="0.2"/><circle cx="11" cy="22" r="2"/><circle cx="21" cy="22" r="2"/></svg>',
   'Hjärtat och blodet': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 27s-12-7-12-15a7 7 0 0 1 12-5 7 7 0 0 1 12 5c0 8-12 15-12 15z" fill="currentColor" opacity="0.2"/><path d="M10 16h4l2-4 2 6 2-4h3"/></svg>',
-  Blodgrupper: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="22" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="16" cy="23" r="5" fill="currentColor" opacity="0.2"/><text x="8.5" y="15" font-size="6" fill="currentColor" stroke="none">A</text><text x="20" y="15" font-size="6" fill="currentColor" stroke="none">B</text><text x="14" y="26" font-size="5" fill="currentColor" stroke="none">AB</text></svg>',
-  'Blodets rening': '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="16" rx="5" ry="8" fill="currentColor" opacity="0.2"/><ellipse cx="20" cy="16" rx="5" ry="8" fill="currentColor" opacity="0.2"/><path d="M12 8c0-3 8-3 8 0"/><path d="M16 6v-2M16 4l-2 1M16 4l2 1"/></svg>',
-  Blodtrycket: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10" fill="currentColor" opacity="0.1"/><path d="M8 16h3l2-5 4 10 3-7 2 2h3"/></svg>'
+  Blodgrupper: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="22" cy="12" r="5" fill="currentColor" opacity="0.2"/><circle cx="16" cy="23" r="5" fill="currentColor" opacity="0.2"/><text x="8.5" y="15" font-size="6" fill="currentColor" stroke="none">A</text><text x="20" y="15" font-size="6" fill="currentColor" stroke="none">B</text><text x="14" y="26" font-size="5" fill="currentColor" stroke="none">AB</text></svg>'
 };
 const catColors = { Fotosyntes:'#2d6a4f', Cellandning:'#c4502b', Kolhydrater:'#c8941e', Fetter:'#b86d3d', Proteiner:'#7d4ba0', Vitaminer:'#d4912a', Mineralämnen:'#4a6b8a',
   Cellen:'#5b7fa6', Matspjälkning:'#b85c38', Andning:'#3a7d6e', 'Hjärtat och blodet':'#c0392b', Blodgrupper:'#7b4f9e',
-  'Blodets rening':'#2e6b5e', Blodtrycket:'#8b2252' };
+  'Identitetsbegreppet':'#8b3a8b', 'Normer och integritet':'#6b4c9e', 'Självkänsla':'#b5451b', 'Identitetskris':'#7a3b1e',
+  'Kön och könsidentitet':'#c0392b', Sexualitet:'#e67e22', Jämställdhet:'#2980b9',
+  Livssyn:'#3d5a80',
+  'Kläder och utseende':'#1d6e5e', Utseendenormer:'#8e5a2b', 'Mode och historia':'#5d4037' };
 
 const cheers = {
   reveal:  [
@@ -1879,8 +1850,16 @@ const DATA = {
       color: '#2d6a4f',
       description: 'Biologi, kemi och fysik för högstadiet.',
       topics: [
-        { id: 'manniskokroppen', name: 'Människokroppen', description: 'Cellen, matspjälkning, andning, hjärtat och blodomloppet, blodgrupper, blodtrycket och blodets rening.', icon: '🫀', cardCount: 48, cards: getMkroppenCards() },
+        { id: 'manniskokroppen', name: 'Människokroppen', description: 'Cellen, matspjälkning, andning, hjärtat och blodomloppet, blodgrupper och blodets rening.', icon: '🫀', cardCount: 28, cards: getMkroppenCards() },
         { id: 'livets-kemi', name: 'Livets kemi', description: 'Fotosyntes, cellandning, kolhydrater, fetter, proteiner, vitaminer och mineralämnen.', icon: '🧪', cardCount: 22, cards: getKemiCards() }
+      ]
+    },
+    {
+      id: 'so', name: 'SO', fullName: 'Samhällsorienterande ämnen',
+      color: '#b5451b',
+      description: 'Religion, identitet och samhälle för åk 8.',
+      topics: [
+        { id: 'identitet', name: 'Identitet', description: 'Självbild, kön, sexualitet, livssyn, normer och utseende – vem är du?', icon: '🪞', cardCount: 54, cards: [...getSoIdentitetCards(), ...getSoKonCards(), ...getSoLivssynCards(), ...getSoUtseendeCards()] }
       ]
     }
   ]
@@ -2025,15 +2004,7 @@ function showSubject(subjectId) {
       ? 'background:var(--paper2);color:var(--ink3);border-color:var(--line);opacity:.65;cursor:not-allowed;'
       : '';
 
-    const topicXp = (XP.topicXP && XP.topicXP[topic.id]) || 0;
-    const xpDisplay = topicXp >= 1000 ? Math.round(topicXp/100)/10+'k' : topicXp;
-    const xpBadge = `<div class="topic-xp-badge visible">
-           <div class="topic-xp-badge-num">${xpDisplay}</div>
-           <div class="topic-xp-badge-label">XP</div>
-         </div>`;
-
     card.innerHTML = `
-      ${xpBadge}
       <div class="topic-icon-wrap">${topic.icon}</div>
       <div class="topic-name">${topic.name}</div>
       <div class="topic-desc">${topic.description}</div>
@@ -2606,36 +2577,10 @@ function getMkroppenCards() {
     { type:'write', q:'Vad händer med blodets pH om vi håller andan?', a:'pH-värdet sjunker (blodet försuras)', keywords:[['sjunker','sänks','lägre','surare'],['försuras','sur']], cat:'Hjärtat och blodet' },
     { type:'flip', q:'Vad heter hjärtats fyra hålrum?', a:'Vänster förmak, vänster kammare, höger förmak och höger kammare.', cat:'Hjärtat och blodet' },
 
-    // === BLODETS FUNKTION OCH INNEHÅLL ===
-    { type:'flip', q:'Hur mycket blod har en vuxen människa?', a:'Mellan 4–6 liter blod.', cat:'Hjärtat och blodet' },
-    { type:'flip', q:'Vad består blodplasma av?', a:'Blodplasma är mer än hälften av blodet (ca 55%) och består av vatten, salt och näringsämnen.', cat:'Hjärtat och blodet' },
-    { type:'flip', q:'Vad är bloddopning?', a:'Att konstgjort öka mängden röda blodkroppar i blodet så att mer syre kan transporteras runt – vilket ger idrottsprestation.', cat:'Hjärtat och blodet' },
-    { type:'flip', q:'Vilka tre typer av vita blodkroppar finns det?', a:'Ätarceller (makrofager) som äter upp inkräktare, T-celler som känner igen främmande ämnen, och B-celler som producerar antikroppar.', cat:'Hjärtat och blodet' },
-    { type:'flip', q:'Vad händer steg för steg när vi skär oss i fingret?', a:'1. Blodkärl drar ihop sig. 2. Blodplättar klibbar ihop. 3. Proteintrådar (fibrin) bildar ett nät. 4. Röda blodkroppar fastnar i nätet. 5. En sårskroppa bildas.', cat:'Hjärtat och blodet' },
-    { type:'write', q:'Vad kallas proteintrådarnas nät som bildas vid sårläkning?', a:'Fibrin', keywords:[['fibrin']], cat:'Hjärtat och blodet' },
-    { type:'flip', q:'Varför är järn viktigt för röda blodkroppar?', a:'Hemoglobin innehåller järn – det är järnet som binder syre. Järnbrist leder till blodbrist (anemi) med trötthet och blekhet.', cat:'Hjärtat och blodet' },
-
-    // === BLODTRYCKET ===
-    { type:'flip', q:'Vad är blodtryck?', a:'Det tryck som uppstår i blodkärlen när hjärtat pumpar ut blodet i kroppen.', cat:'Blodtrycket' },
-    { type:'flip', q:'Vad räknas som normalt blodtryck?', a:'Under 140/90 mm Hg vid vila. Det högre värdet uppstår vid hjärtats sammandragning, det lägre när hjärtat vilar.', cat:'Blodtrycket' },
-    { type:'flip', q:'Vad räknas som lågt blodtryck och vilka symptom ger det?', a:'Under 90/60 mm Hg med symptom. Symptom: svimningskänsla, yr, kallsvettas, svag.', cat:'Blodtrycket' },
-    { type:'flip', q:'Vad räknas som högt blodtryck och vad riskerar man?', a:'Över 140/90 mm Hg. Ökad risk för hjärt-kärlsjukdomar, stroke, synförlust och njurproblem.', cat:'Blodtrycket' },
-    { type:'write', q:'Vilken enhet mäts blodtryck i?', a:'mm Hg', keywords:[['mm hg','mmhg','millimeter','kvicksilver']], cat:'Blodtrycket' },
-
-    // === BLODETS RENING ===
-    { type:'flip', q:'Vilka fyra uppgifter har levern?', a:'1. Rena blodet från skadliga ämnen. 2. Lagra glukos som glykogen. 3. Producera galla. 4. Lagra vitaminer (D, A, B12).', cat:'Blodets rening' },
-    { type:'flip', q:'Hur tar levern hand om nedbrytningsprodukter?', a:'De kan gå via gallan till tarmen och ut med avföringen, eller transporteras med blodet till njurarna.', cat:'Blodets rening' },
-    { type:'flip', q:'Vad är nefroner?', a:'Filterenheter i njurarna. I nefronerna filtreras blodet från avfallsprodukter och urin bildas som består av vatten och avfall.', cat:'Blodets rening' },
-    { type:'flip', q:'Vad är njurarnas tre uppgifter?', a:'1. Rena blodet från avfallsprodukter. 2. Tillverka urin. 3. Reglera vätskebalansen i kroppen.', cat:'Blodets rening' },
-    { type:'flip', q:'Vad händer med det renade blodet i njurarna?', a:'Det renade blodet förs tillbaka till blodomloppet. Urinet transporteras till urinblåsan och kissas sedan ut genom urinröret.', cat:'Blodets rening' },
-
     // === BLODGRUPPER ===
     { type:'flip', q:'Vad innebär ABO-systemet?', a:'Fyra blodgrupper (A, B, AB och 0) baserade på vilka antigener som sitter på de röda blodkropparna. Blodgrupperna kan inte alltid blandas.', cat:'Blodgrupper' },
     { type:'flip', q:'Vilka blodgrupper kan en person med blodgrupp B ta emot?', a:'Blodgrupp B och blodgrupp 0. Blodgrupp B har A-antikroppar och kan inte ta emot blod med A-antigener.', cat:'Blodgrupper' },
-    { type:'flip', q:'Vad är antigener?', a:'Små proteiner som sitter på de röda blodkropparnas yta och skiljer blodgrupperna åt.', cat:'Blodgrupper' },
-    { type:'flip', q:'Vad är antikroppar i blodet?', a:'Ämnen i blodplasman som angriper ett visst typ av antigen. T.ex. har blodgrupp A antikroppar mot B-antigener.', cat:'Blodgrupper' },
-    { type:'write', q:'Vilken blodgrupp kan ta emot blod från alla andra grupper?', a:'AB', keywords:[['ab']], cat:'Blodgrupper' },
-    { type:'flip', q:'Vilka antigener och antikroppar har blodgrupp 0?', a:'Inga antigener på blodkropparna. Antikroppar mot både A- och B-antigener i plasma. Kan ge blod till alla.', cat:'Blodgrupper' }
+    { type:'flip', q:'Hur renas blodet?', a:'I levern bryts giftiga ämnen ner. I njurarna filtreras blodet – gifter lämnar kroppen med urinen, och näring återförs till blodet.', cat:'Blodgrupper' }
   ];
 }
 
@@ -2659,11 +2604,7 @@ function getMkroppenQuizBank() {
       { q:'Var renas blodet i kroppen?', options:['I hjärtat och lungorna','I levern och njurarna','I magsäcken','I mjälten'], correct:1, explanation:'Levern bryter ner gifter och njurarna filtrerar blodet och bildar urin.', cat:'Blodgrupper' },
       { q:'Vad gör ribosomerna i cellen?', options:['Sköter cellandning','Tillverkar proteiner','Rensar avfall','Skyddar cellen'], correct:1, explanation:'Ribosomerna kallas cellens proteinfabriker – de bygger proteiner utifrån instruktioner från DNA.', cat:'Cellen' },
       { q:'Vad är diafragma?', options:['En typ av blodkropp','En lungblåsa','Den stora andningsmuskeln','En del av matstrupen'], correct:2, explanation:'Diafragman är den stora muskeln under lungorna som styr in- och utandning.', cat:'Andning' },
-      { q:'Vad stoppar blödningar i kroppen?', options:['Vita blodkroppar','Blodplättar','Röda blodkroppar','Hormonerna'], correct:1, explanation:'Blodplättar klibbar ihop vid sår och bildar en propp som stoppar blödningen.', cat:'Hjärtat och blodet' },
-      { q:'Hur mycket blod har en vuxen människa?', options:['1–2 liter','4–6 liter','8–10 liter','2–3 liter'], correct:1, explanation:'En vuxen människa har ca 4–6 liter blod – ungefär lika mycket som i en stor flaska.', cat:'Hjärtat och blodet' },
-      { q:'Vad är blodtryck?', options:['Hjärtats slagfrekvens','Trycket i blodkärlen när hjärtat pumpar','Mängden syre i blodet','Blodets färg'], correct:1, explanation:'Blodtrycket uppstår när hjärtat pumpar ut blodet i kärlen. Det mäts i mm Hg och har ett övre och ett undre värde.', cat:'Blodtrycket' },
-      { q:'Vilka ämnen kan levern bryta ner?', options:['Syre och koldioxid','Alkohol och läkemedel','Socker och stärkelse','Vitaminer och mineraler'], correct:1, explanation:'Levern har enzymer som bryter ner skadliga ämnen som alkohol och läkemedel till mindre farliga former.', cat:'Blodets rening' },
-      { q:'Vad tillverkar njurarna?', options:['Galla','Blodkroppar','Urin','Enzymer'], correct:2, explanation:'Njurarna filtrerar blodet och bildar urin av avfallsprodukter. Urinet lagras i urinblåsan.', cat:'Blodets rening' }
+      { q:'Vad stoppar blödningar i kroppen?', options:['Vita blodkroppar','Blodplättar','Röda blodkroppar','Hormonerna'], correct:1, explanation:'Blodplättar klibbar ihop vid sår och bildar en propp som stoppar blödningen.', cat:'Hjärtat och blodet' }
     ],
     medium: [
       { q:'Varför kan tunntarmen ta upp näring effektivt trots sin korta längd?', options:['Den är mycket varm','Tarmludden ökar ytan till tennisplanstorlek','Den innehåller extra enzymer','Magsyran hjälper till'], correct:1, explanation:'Tarmluddens veck och hårliknande utskott gör att tunntarmens yta blir enorm – svarar mot ca en tennisplan.', cat:'Matspjälkning' },
@@ -2680,11 +2621,7 @@ function getMkroppenQuizBank() {
       { q:'Vad innehåller bukspottet som töms i tolvfingertarmen?', options:['Galla och saltsyra','Enzymer och basiska ämnen som neutraliserar magsyran','Slem och vatten','Hemoglobin'], correct:1, explanation:'Bukspottet innehåller enzymer som bryter ner alla tre typer av näring, och basiska ämnen som neutraliserar magsyran.', cat:'Matspjälkning' },
       { q:'Vilken blodgrupp kan ta emot blod från alla?', options:['O','A','B','AB'], correct:3, explanation:'AB kallas universell mottagare – den saknar antikroppar mot A- och B-antigener.', cat:'Blodgrupper' },
       { q:'Vad gör hjärtats klaffar?', options:['Pumpar blodet aktivt','Hindrar blodet från att rinna åt fel håll','Styr hjärtrytmen','Öppnar sig vid stressl'], correct:1, explanation:'Segelklaffar och fickklaffar fungerar som ventiler och säkerställer att blodet alltid flödar åt rätt håll.', cat:'Hjärtat och blodet' },
-      { q:'Vad är cellandning?', options:['Att vi andas luft in och ut','Förbränning av glukos i mitokondrerna som frigör energi','Syrets färd från lungorna till blodet','Proteinernas bildning i ribosomerna'], correct:1, explanation:'Cellandning är den kemiska process i mitokondrerna: glukos + syre → koldioxid + vatten + energi.', cat:'Cellen' },
-      { q:'Vad händer steg 1 när du skär dig i fingret?', options:['Blodplättar klibbar ihop','Blodkärlet drar ihop sig','Fibrin bildas','En sårskroppa bildas'], correct:1, explanation:'Steg 1: Blodkärlet drar ihop sig (vasokonstriktion) för att minska blödningen. Sedan klibbar blodplättar ihop och fibrin bildar ett nät.', cat:'Hjärtat och blodet' },
-      { q:'Vilket blodtryck räknas som högt?', options:['Under 90/60','Exakt 120/80','Över 140/90','Exakt 100/70'], correct:2, explanation:'Blodtryck över 140/90 mm Hg räknas som högt (hypertoni) och ökar risken för stroke och hjärtattack.', cat:'Blodtrycket' },
-      { q:'Vad lagrar levern som reservenergi?', options:['Fett','Glykogen','Protein','Vitaminer'], correct:1, explanation:'Levern lagrar glukos i form av glykogen. När kroppen behöver energi snabbt bryter levern ner glykogenet till glukos igen.', cat:'Blodets rening' },
-      { q:'Vad är nefroner?', options:['Blodkärl i levern','Filterenheter i njurarna','Enzymer som rensar gifter','Vita blodkroppar i njurarna'], correct:1, explanation:'Nefroner är njurarnas filterenheter. I dem filtreras blodet och urin bildas av avfallsprodukter. En njure har ungefär en miljon nefroner!', cat:'Blodets rening' }
+      { q:'Vad är cellandning?', options:['Att vi andas luft in och ut','Förbränning av glukos i mitokondrerna som frigör energi','Syrets färd från lungorna till blodet','Proteinernas bildning i ribosomerna'], correct:1, explanation:'Cellandning är den kemiska process i mitokondrerna: glukos + syre → koldioxid + vatten + energi.', cat:'Cellen' }
     ],
     hard: [
       { q:'En person med blodgrupp B har A-antikroppar. Varför kan hen inte ta emot blod från blodgrupp AB?', options:['AB-blod innehåller A-antigener som A-antikropparna attackerar','AB-blod är för tjockt','AB-blod innehåller för mycket koldioxid','AB-blod saknar blodplättar'], correct:0, explanation:'Antikropparna i mottagarens blod attackerar antigener de känner igen som "främmande". B-blodets A-antikroppar reagerar mot A-antigener i AB-blodet.', cat:'Blodgrupper' },
@@ -2706,6 +2643,407 @@ function getMkroppenQuizBank() {
   };
 }
 DATA.subjects[0].topics[1].quizBank = getMkroppenQuizBank();
+
+/* ═══════════════════════════════════════════════════════
+   SO – IDENTITET GRUNDER – FLASHCARDS
+═══════════════════════════════════════════════════════ */
+function getSoIdentitetCards() {
+  return [
+    { type:'flip',  q:"Vad betyder ordet 'identitet' från latinet?", a:"Identitet kommer från latinets 'idem' som betyder 'samma'. Vi identifierar oss – bekräftar att vi är den vi säger att vi är.", cat:'Identitetsbegreppet' },
+    { type:'flip',  q:"Vad är självbild?", a:"Självbild är din egen bild av vem du är. Den formas av dig själv, av människor omkring dig och av trender i samhället.", cat:'Identitetsbegreppet' },
+    { type:'write', q:"Nämn skillnaden mellan medfödd och självvald identitet.", a:"Medfödd: personliga egenskaper, sexualitet, kroppsliga anlag. Självvald: intressen, klädstil, värderingar, språk.", keywords:[["medfödd","personlig","sexualitet"],["självvald","intresse","klädstil","värdering"]], cat:'Identitetsbegreppet' },
+    { type:'flip',  q:"Vad är integritet?", a:"Integritet är alla människors rätt till en privat sfär, psykiskt och fysiskt, och rätten att inte behöva dela känsliga uppgifter om sig själv.", cat:'Normer och integritet' },
+    { type:'flip',  q:"Vad är normer?", a:"Normer är oskrivna regler i ett samhälle. De underlättar samspel mellan människor, men kan också bli förtryckande mot vissa grupper.", cat:'Normer och integritet' },
+    { type:'flip',  q:"Vad menas med att vi har 'flera identiteter'?", a:"Vi visar olika sidor av oss själva i olika sammanhang – t.ex. en sida hemma, en annan i skolan. Ibland kan olika identiteter krocka med varandra.", cat:'Identitetsbegreppet' },
+    { type:'write', q:"Nämn fyra faktorer som påverkar identiteten.", a:"Normer, kön, sexuell läggning, etnicitet, personliga egenskaper, fritidsintressen, religion och ålder.", keywords:[["kön","sexu","etnici","religion","intresse","normer","ålder"]], cat:'Identitetsbegreppet' },
+    { type:'flip',  q:"Vad är en identitetskris?", a:"En identitetskris uppstår när förändringar i livet rubbar bilden av vem man är – t.ex. flytt, skilsmässa, förlust av närstående eller sjukdom.", cat:'Identitetskris' },
+    { type:'flip',  q:"Nämn skillnaden mellan självkänsla och självförtroende.", a:"Självkänsla = hur du uppfattar dig själv som människa (att duga som man är). Självförtroende = tron på att det du gör är rätt. Man kan ha högt självförtroende men låg självkänsla.", cat:'Självkänsla' },
+    { type:'write', q:"Sammanfatta med egna ord: Vad är skillnaden mellan självkänsla och självförtroende?", a:"Självkänsla handlar om att vara – om man duger som människa. Självförtroende handlar om att göra – vad man klarar av.", keywords:[["vara","människa","duga"],["göra","klara"]], cat:'Självkänsla' },
+    { type:'flip',  q:"Var är rätten till sin identitet inskriven?", a:"I barnkonventionen. Att inte öppet kunna visa sin identitet på grund av normer kan leda till psykiskt dåligt mående.", cat:'Normer och integritet' },
+    { type:'flip',  q:"Hur påverkar familjen vår identitet?", a:"I början formas vi mest av föräldrarna. Sedan påverkas vi mer av andra utanför familjen och av samhällets normer. Stora händelser i livet förändrar också vår identitet.", cat:'Identitetsbegreppet' },
+    { type:'flip',  q:"Hur kan kläder och språk kopplas till identitet?", a:"Vi visar identitet och grupptillhörighet genom kläder och språk. Det kan skapa vi-och-dom-tänkande och uteslutning av andra.", cat:'Normer och integritet' },
+    { type:'flip',  q:"Vad är en subkultur?", a:"En grupp som via t.ex. klädstil vänder sig mot den rådande normen för att uttrycka sin identitet.", cat:'Normer och integritet' },
+    { type:'write', q:"Vad är ett vi- och dom-tänkande? Ge ett exempel.", a:"När grupptillhörighet skapar gränser mot andra grupper och utesluter dem som inte passar in – t.ex. subkulturer som markerar sin identitet mot mainstreamkulturen.", keywords:[["grupp","gräns","uteslut"]], cat:'Normer och integritet' },
+    { type:'flip',  q:"Kan identitet förändras? Ge exempel.", a:"Ja – identiteten kan förändras genom hela livet. Stora händelser (flytt, skilsmässa, sjukdom, krig) liksom livets naturliga gång påverkar vem vi är.", cat:'Identitetsbegreppet' },
+    { type:'flip',  q:"Vad menas med 'rotlöshet' i relation till identitet?", a:"Utan en tro, ideologi eller gemenskap att stå i kan människan känna sig rotlös – sakna en grund att definiera sin identitet utifrån.", cat:'Identitetsbegreppet' },
+    { type:'flip',  q:"Nämn fem faktorer man brukar mäta personlighet efter.", a:"Introvert/extrovert, vänlighet, nivå av ångestbenägenhet, öppenhet och kreativitet, samt om man är plikttrogen eller slarvig.", cat:'Självkänsla' }
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – KÖN & SEXUALITET – FLASHCARDS
+═══════════════════════════════════════════════════════ */
+function getSoKonCards() {
+  return [
+    { type:'flip',  q:"Vad är biologiskt kön?", a:"Det kön som bestäms av könskromosomer och könsorgan vid födseln.", cat:'Kön och könsidentitet' },
+    { type:'flip',  q:"Vad är juridiskt kön?", a:"Det kön som registreras hos myndigheter. I Sverige finns två juridiska kön: man och kvinna. Man kan ändra sitt juridiska kön.", cat:'Kön och könsidentitet' },
+    { type:'flip',  q:"Vad är könsidentitet?", a:"Det kön en människa känner sig bekväm i. Könsidentiteten kan skilja sig från det biologiska eller juridiska könet.", cat:'Kön och könsidentitet' },
+    { type:'write', q:"Vad kallas en person vars könsidentitet skiljer sig från det biologiska/juridiska könet?", a:"Transperson.", keywords:[["trans"]], cat:'Kön och könsidentitet' },
+    { type:'flip',  q:"Vad är heterosexualitet och varför kallas det samhällets norm?", a:"Heterosexualitet innebär attraktion till det motsatta könet. Det är normen i samhället, vilket kan göra det svårt att inse och acceptera andra sexuella läggningar.", cat:'Sexualitet' },
+    { type:'flip',  q:"Vad menas med bisexualitet?", a:"Att man attraheras av både män och kvinnor.", cat:'Sexualitet' },
+    { type:'flip',  q:"Kan sexuell läggning förändras?", a:"Sexuell läggning kan vara medfödd och stabil, men för vissa ändras den över tid eller beroende på vem man förälskar sig i.", cat:'Sexualitet' },
+    { type:'flip',  q:"Vad menas med HBTQI?", a:"HBTQI = homosexuella, bisexuella, transpersoner, queer och intersexuella. En samlingsterm för dem vars kön eller sexualitet avviker från heteronormen.", cat:'Sexualitet' },
+    { type:'flip',  q:"Vad är jämställdhet?", a:"Jämställdhet innebär att alla ska ha samma möjligheter och rättigheter oavsett kön, och inte diskrimineras på grund av kön eller sexualitet.", cat:'Jämställdhet' },
+    { type:'flip',  q:"Vad visar statistiken om löneskillnader i Sverige?", a:"Genomsnittslönen för en kvinna (2022) var 36 200 kr och för en man 40 200 kr. Den största orsaken är att kvinnor och män arbetar inom olika yrken.", cat:'Jämställdhet' },
+    { type:'flip',  q:"Hur ser fördelningen av föräldraledigheten ut i Sverige idag?", a:"Männen tar ut ca 30 % av föräldradagarna, kvinnorna 70 %. 90 dagar är öronmärkta för vardera förälder.", cat:'Jämställdhet' },
+    { type:'write', q:"Vad är samtyckeslagen och när infördes den?", a:"Samtyckeslagen (2018) innebär att sex ska vara frivilligt – samtycke är gränsen mellan frivilligt sex och övergrepp.", keywords:[["2018"],["frivillig","samtycke"]], cat:'Jämställdhet' },
+    { type:'flip',  q:"Hur stor andel av riksdagens ledamöter är idag kvinnor?", a:"Över 40 procent av riksdagens ledamöter är kvinnor (2026).", cat:'Jämställdhet' },
+    { type:'flip',  q:"Vad är sexuella trakasserier enligt diskrimineringslagen?", a:"'Ett uppträdande av sexuell natur som kränker någons värdighet.' Det är alltid den drabbade som avgör gränsen.", cat:'Jämställdhet' },
+    { type:'flip',  q:"Varför kan normer kring kön vara svåra att bryta?", a:"Samhällets normer skapar förväntningar på hur man ska vara beroende på kön och läggning. I vissa länder kan det vara livsfarligt att bryta mot dessa normer.", cat:'Kön och könsidentitet' },
+    { type:'flip',  q:"Vad är könsuppdelad arbetsmarknad?", a:"När kvinnor och män arbetar inom olika yrken och branscher. Typiska kvinnodominerade yrken (t.ex. undersköterska) har ofta lägre lön och lägre status.", cat:'Jämställdhet' }
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – LIVSSYN & RELIGION – FLASHCARDS
+═══════════════════════════════════════════════════════ */
+function getSoLivssynCards() {
+  return [
+    { type:'flip',  q:"Vad är en livssyn?", a:"En livssyn är hur du ser på livet och vad den synen grundar sig på – det kan vara en religiös tro, en filosofi eller en ideologi.", cat:'Livssyn' },
+    { type:'flip',  q:"Hur kan religion bli en del av identiteten?", a:"Religiösa ritualer (t.ex. att gå på gudstjänst) och tron på Gud kan bli en central del av hur man definierar sig själv och sin gemenskap.", cat:'Livssyn' },
+    { type:'flip',  q:"Vad menar man med att 'ärva' en religion?", a:"Familjen kan påverka identiteten genom att barnet föds in i och anammar föräldrarnas religion utan att aktivt ha valt den.", cat:'Livssyn' },
+    { type:'flip',  q:"Vad är skillnaden mellan religiös tro, livssyn och ideologi?", a:"Religiös tro bygger på tro på gudar/gudomlighet och ritualer. Livssyn är en mer personlig syn på livet. Ideologi är ett politiskt/samhälleligt tankesystem.", cat:'Livssyn' },
+    { type:'flip',  q:"Hur kan religiös identitet och sexuell identitet komma i konflikt?", a:"Inom vissa religiösa riktningar är synen på homosexualitet begränsande. Troende homosexuella kan tvingas dölja delar av sin identitet.", cat:'Livssyn' },
+    { type:'flip',  q:"Varför är religion viktig för många människors identitet?", a:"Religion ger gemenskap, ritualer och ett helhetsperspektiv på livet. Många menar att utan tro förlorar man en grund att stå på.", cat:'Livssyn' },
+    { type:'write', q:"Vad menas med 'rotlöshet' i ett religiöst sammanhang?", a:"Att en människa utan tro kan sakna en djupare grund för sin identitet och gemenskap, vilket vissa menar bidrar till problem i samhället.", keywords:[["grund","identitet","gemenskap"]], cat:'Livssyn' },
+    { type:'flip',  q:"Kan en ideologi eller ateistisk livssyn ersätta religion?", a:"En ideologi eller ateistisk livssyn ger inte automatiskt samma helhetsperspektiv med riter och gemenskap som en religion. Det kan vara ett alternativ men är annorlunda.", cat:'Livssyn' },
+    { type:'flip',  q:"Vad är en ritual och hur hör den till identiteten?", a:"En ritual är en återkommande ceremoni eller handling kopplad till tro eller tradition (t.ex. bön, gudstjänst, konfirmation). Den stärker tillhörighet och identitet.", cat:'Livssyn' },
+    { type:'flip',  q:"Nämn ett exempel på hur livssyn kan styra vardagliga val.", a:"En religiös person kan välja att gå på gudstjänst varje vecka, följa dietary laws (t.ex. halal/kosher), fasta under vissa perioder eller bära religiösa symboler.", cat:'Livssyn' }
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – UTSEENDE & MODE – FLASHCARDS (placeholder, mer material kommer)
+═══════════════════════════════════════════════════════ */
+function getSoUtseendeCards() {
+  return [
+    { type:'flip',  q:"Hur kan kläder uttrycka identitet?", a:"Kläder, smycken, frisyrer och smink är viktiga sätt att uttrycka vem man är. De kan visa samhällsklass, yrke, grupptillhörighet och kulturell bakgrund.", cat:'Kläder och utseende' },
+    { type:'flip',  q:"Vad är en subkultur i modesammanhang?", a:"En grupp som medvetet väljer en klädstil som vänder sig mot den rådande normen för att markera sin identitet och grupptillhörighet.", cat:'Kläder och utseende' },
+    { type:'flip',  q:"Vad är smalhetsnormen?", a:"En norm i samhället om att en smal kropp är idealet. Den påverkar framför allt unga och kan bidra till psykisk ohälsa och ätstörningar.", cat:'Utseendenormer' },
+    { type:'flip',  q:"Vad är snabbmode?", a:"Kläder som massproduceras billigt och byts ut ofta. Det är miljöbelastande – t.ex. går det åt 2 700 liter vatten för att tillverka en enda T-shirt.", cat:'Mode och historia' },
+    { type:'flip',  q:"Vad utlöste den franska revolutionens klädförändringar?", a:"Revolutionärerna (sans-culottes) bar långa byxor och kastade av sig de adelspräglade knäbyxorna. Kläder blev politiska symboler.", cat:'Mode och historia' },
+    { type:'flip',  q:"Hur har skönhetsidealet för kvinnokroppen förändrats historiskt?", a:"Idealet har skiftat: ibland rund kropp, ibland smal. Idag dominerar smalhetsnormen och hälsoidealet, förstärkt av sociala medier och influencers.", cat:'Utseendenormer' },
+    { type:'flip',  q:"Varför bör man vara kritisk mot sociala mediers påverkan på utseendenormer?", a:"Sociala medier och reklam skapar ett starkt fokus på utseende som kan vara orealistiskt. Det kan leda till press, psykisk ohälsa och i värsta fall ätstörningar.", cat:'Utseendenormer' },
+    { type:'flip',  q:"Hur skiljer sig modet för överklassen och underklassen historiskt?", a:"Överklassen följde växlande mode som markerade status. Underklassen hade kläder som var funktionella och slitstarka – mode var en lyx de inte hade råd med.", cat:'Mode och historia' },
+    { type:'flip',  q:"Vad är ett skönhetsideal?", a:"En föreställning om hur kroppen eller utseendet 'borde' se ut för att anses vackert. Det varierar mellan kulturer och historiska perioder.", cat:'Utseendenormer' },
+    { type:'flip',  q:"Hur hänger kläder ihop med nationalitet och etnicitet?", a:"Kläder och dräkter kan signalera kulturell tillhörighet, t.ex. samiska dräkter. Men man kan inte säkert dra slutsatser om identitet bara från någons yttre.", cat:'Kläder och utseende' }
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – IDENTITET GRUNDER – QUIZBANK
+═══════════════════════════════════════════════════════ */
+function getSoIdentitetQuizBank() {
+  return {
+    easy: [
+      { q:"Vad betyder 'identitet' från latinet?", options:["Frihet","Samma","Förändring","Rättighet"], correct:1, explanation:"Identitet kommer från latinets 'idem' = samma. Vi identifierar oss för att bekräfta att vi är den vi säger att vi är.", cat:"Identitetsbegreppet" },
+      { q:"Vad är självbild?", options:["Din bild av hur du vill se ut","Din bild av vem du är","Andras bild av vem du är","Din bild av hur samhället ser ut"], correct:1, explanation:"Självbild = din egen bild av vem du är. Den formas av dig själv, av omgivningen och av samhällets trender.", cat:"Identitetsbegreppet" },
+      { q:"Vad är integritet?", options:["Rätten att bli känd av alla","Rätten till en privat sfär och att inte dela känsliga uppgifter","Skyldigheten att berätta vem man är","Förmågan att hitta sin identitet"], correct:1, explanation:"Integritet = rätten till en privat sfär, psykiskt och fysiskt, utan att tvingas dela känslig information.", cat:"Normer och integritet" },
+      { q:"Vad är normer?", options:["Lagar och regler i en stat","Oskrivna regler i ett samhälle","Personliga värderingar","Statliga förordningar"], correct:1, explanation:"Normer är oskrivna regler som styr samspel i samhället. De kan vara positiva men också förtryckande.", cat:"Normer och integritet" },
+      { q:"Vilket av dessa är ett exempel på MEDFÖDD identitet?", options:["Klädstil","Intressen","Personliga egenskaper","Värderingar"], correct:2, explanation:"Medfödda identiteter inkluderar personliga egenskaper, sexualitet och kroppsliga anlag. Klädstil, intressen och värderingar är självvalda.", cat:"Identitetsbegreppet" },
+      { q:"Var är rätten till sin identitet inskriven?", options:["Grundlagen","Barnkonventionen","Diskrimineringslagen","Mänskliga rättigheterna"], correct:1, explanation:"Rätten till sin identitet finns inskriven i barnkonventionen, som Sverige också följer som lag.", cat:"Normer och integritet" },
+      { q:"Vad är självkänsla?", options:["Tron på att du klarar svåra uppgifter","Hur du uppfattar och känner för dig själv som människa","Din förmåga att prestera bra","Din känsla inför en tävling"], correct:1, explanation:"Självkänsla = hur du uppfattar och känner för dig själv. Det handlar om att 'duga som man är' – djupare än prestation.", cat:"Självkänsla" },
+      { q:"Vad är självförtroende?", options:["Tron på att du duger som människa","Hur du ser på andra","Tron på att det du gör och tänker är rätt","Förmågan att sätta gränser"], correct:2, explanation:"Självförtroende = tron på att det du gör och tänker är rätt. Det handlar mer om prestation än om hur du ser på dig som person.", cat:"Självkänsla" },
+      { q:"Vad är en identitetskris?", options:["När man väljer ny klädstil","När förändringar i livet rubbar bilden av vem man är","När man byter skola frivilligt","När man bestämmer sig för sin karriär"], correct:1, explanation:"En identitetskris uppstår när förändringar – flytt, skilsmässa, sjukdom – gör att man förlorar känslan av vem man är.", cat:"Identitetskris" },
+      { q:"Vem formas man mest av i tidig ålder?", options:["Lärare","Kompisar","Föräldrar","Sociala medier"], correct:2, explanation:"I början formas identiteten mest av föräldrarna. Sedan vidgas världen och man påverkas mer av vänner, skolan och samhällets normer.", cat:"Identitetsbegreppet" }
+    ],
+    medium: [
+      { q:"Hur kan identiteter krocka?", options:["Bara om man byter religion","Om man bär kläder från fel grupp","När olika delar av ens identitet ställer motstridiga krav – t.ex. tro och sexualitet","Bara hos yngre personer"], correct:2, explanation:"Vi har flera identiteter – ibland kan de krocka. En troende homosexuell kan t.ex. uppleva konflikt om religionen inte accepterar hens sexualitet.", cat:"Identitetsbegreppet" },
+      { q:"Man kan ha högt självförtroende men låg självkänsla. Vad betyder det?", options:["Man är duktig men vet inte om det","Man klarar uppgifter bra men tvivlar på om man duger som människa","Man är säker men opålitlig","Man har positiv självbild men dålig prestation"], correct:1, explanation:"Självförtroende = prestation. Självkänsla = att duga som människa. Man kan vara framgångsrik utåt men ändå inte tycka att man är värd kärlek och omtanke.", cat:"Självkänsla" },
+      { q:"Varför kan det vara skadligt att behöva dölja sin identitet?", options:["Det kräver för mycket energi","Normbrott kan straffas legalt","Det kan leda till psykisk ohälsa och att man saknar delar av sin identitet","Det gör att man inte kan söka jobb"], correct:2, explanation:"Att inte öppet kunna visa vem man är – på grund av normer – kan leda till psykisk ohälsa. Rätten att uttrycka sin identitet är grundläggande för välmående.", cat:"Normer och integritet" },
+      { q:"Vad menas med att vi 'anpassar' vår identitet i olika sammanhang?", options:["Vi byter personlighet helt och hållet","Vi ljuger om oss själva","Vi visar olika delar av vår identitet beroende på sammanhang – som pusselbitar","Vi kopierar andras identiteter"], correct:2, explanation:"Vi visar olika sidor av oss i olika sammanhang – mer omtänksam hemma, mer koncentrerad i skolan – utan att det innebär att vi är falska.", cat:"Identitetsbegreppet" },
+      { q:"Vad utlöser typiskt en identitetskris?", options:["Normala åldersförändringar","Yttre händelser som flytt, skilsmässa, sjukdom eller krig","Att man byter stil","Att man börjar en ny hobby"], correct:1, explanation:"Identitetskris uppstår av förändringar – både små (flytt, ny skola) och stora (att fly från krig, förlora en närstående, svår sjukdom).", cat:"Identitetskris" },
+      { q:"Varför kan normer vara både positiva och negativa?", options:["De är alltid negativa för minoriteter","De underlättar samspel men kan också bli förtryckande mot vissa grupper","De gäller bara i formella sammanhang","De skapas alltid av staten"], correct:1, explanation:"Normer ger en gemensam grund för samspel, men kan också sätta gränser som är orättvisa och förtryckande mot t.ex. HBTQI-personer eller etniska minoriteter.", cat:"Normer och integritet" },
+      { q:"Vilket påstående är sant om självkänsla?", options:["Den är konstant och förändras aldrig","Den är alltid hög hos den som presterar bra","Den kan pendla – vara stark ibland och svag ibland","Den beror bara på hur man ser ut"], correct:2, explanation:"Självkänsla pendlar – livets händelser, relationer och stress påverkar den. Det är normalt att självkänslan varierar.", cat:"Självkänsla" },
+      { q:"Hur kan kläder och språk skapa ett 'vi och dom'?", options:["Kläder markerar inkomst, inte tillhörighet","Kläder och språk kan markera grupptillhörighet och leda till uteslutning av dem som inte passar in","Bara ungdomar påverkas","Det är alltid medvetet och planerat"], correct:1, explanation:"Grupper markerar sin identitet via kläder och språk. Det kan stärka gemenskapen men också leda till att andra utesluts.", cat:"Normer och integritet" }
+    ],
+    hard: [
+      { q:"En person är duktig i skolan och uppskattas av lärare, men mår ändå psykiskt dåligt och tycker inte om sig själv. Vad förklarar detta bäst?", options:["Hen har en psykisk sjukdom","Hen har högt självförtroende men låg självkänsla","Hen har lågt självförtroende","Hen saknar identitet"], correct:1, explanation:"Självförtroende (att klara saker) och självkänsla (att duga som människa) är oberoende. Man kan prestera utmärkt men ändå ha svag självkänsla.", cat:"Självkänsla" },
+      { q:"Hur kan samhällets normer påverka en persons psykiska hälsa negativt?", options:["Normer ger alltid trygghet","Om normerna kräver att man döljer sin identitet kan det orsaka psykisk ohälsa","Normer gäller bara utseende","Psykisk hälsa påverkas bara av familjeförhållanden"], correct:1, explanation:"Att tvingas dölja delar av sig själv – t.ex. sin sexualitet eller religiösa övertygelse – för att passa normerna är psykiskt påfrestande.", cat:"Normer och integritet" },
+      { q:"Varför är rätten att visa sin identitet kopplad till psykisk hälsa?", options:["Det är en mänsklig drivkraft att bli sedd som den man är – utan det ökar stress och ohälsa","Det handlar bara om juridiska rättigheter","Det påverkar bara barn, inte vuxna","Det är kopplat till intelligensutveckling"], correct:0, explanation:"Psykologisk forskning visar att att bli sedd och accepterad som den man är är grundläggande för välbefinnande. Att dölja sin identitet kostar mycket energi.", cat:"Normer och integritet" },
+      { q:"Hur skiljer sig en 'identitetskris' från normal förändring och mognad?", options:["En kris innebär alltid fara","En kris är när förändringen är så stark att den tillfälligt upplöser känslan av vem man är","Mognad sker bara i barndomen","En kris kräver alltid psykologhjälp"], correct:1, explanation:"Normal mognad är gradvis och identiteten hänger med. En kris uppstår när förändringen är för snabb eller för stor – och man tillfälligt förlorar fotfästet i vem man är.", cat:"Identitetskris" },
+      { q:"Varför kan den som behöver 'dölja' sin identitet uppleva en splittring av sin personlighet?", options:["De har inte hittat sin rätta identitet","Att leva med en mask mot omvärlden och en annan inåt skapar psykisk ansträngning och splittring","Det är ett medvetet strategiskt val","Det beror på lågt självförtroende"], correct:1, explanation:"Att visa upp en falsk fasad för att passa normer kräver ständig energi. Skillnaden mellan 'masken' och den verkliga personen kan leda till inre konflikt och psykisk ohälsa.", cat:"Normer och integritet" }
+    ]
+  };
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – KÖN & SEXUALITET – QUIZBANK
+═══════════════════════════════════════════════════════ */
+function getSoKonQuizBank() {
+  return {
+    easy: [
+      { q:"Vad är biologiskt kön?", options:["Det kön du väljer","Det kön som bestäms av kromosom och könsorgan vid födseln","Det kön som registreras av myndigheter","Det kön du känner dig som"], correct:1, explanation:"Biologiskt kön bestäms av könskromosomer (XX/XY) och könsorgan vid födseln.", cat:"Kön och könsidentitet" },
+      { q:"Vad är juridiskt kön?", options:["Det kön din kropp har","Det kön du känner dig som","Det kön som registreras hos myndigheter","Det kön som föräldrar väljer"], correct:2, explanation:"Juridiskt kön är det kön som registreras av myndigheter, t.ex. i passet. I Sverige finns man och kvinna.", cat:"Kön och könsidentitet" },
+      { q:"Vad är könsidentitet?", options:["Det kön som bestäms biologiskt","Det kön som registreras juridiskt","Det kön en människa känner sig bekväm i","Det kön samhället tilldelar en"], correct:2, explanation:"Könsidentitet är det kön du innerst inne känner att du är – oberoende av biologi eller juridik.", cat:"Kön och könsidentitet" },
+      { q:"Vad kallas en person vars könsidentitet skiljer sig från det biologiska könet?", options:["Bisexuell","Transperson","Intersexuell","Asexuell"], correct:1, explanation:"En transperson är en person vars könsidentitet inte stämmer överens med det biologiska eller juridiska könet.", cat:"Kön och könsidentitet" },
+      { q:"Vad innebär jämställdhet?", options:["Att alla är exakt likadana","Att alla ska ha samma möjligheter och rättigheter oavsett kön","Att fler kvinnor ska arbeta","Att män och kvinnor ska ha samma jobb"], correct:1, explanation:"Jämställdhet = lika möjligheter och rättigheter oavsett kön. Man ska inte diskrimineras på grund av kön eller sexualitet.", cat:"Jämställdhet" },
+      { q:"Vilket av dessa är samhällets sexuella norm i Sverige?", options:["Bisexualitet","Homosexualitet","Heterosexualitet","Asexualitet"], correct:2, explanation:"Heterosexualitet är normen i samhället, vilket innebär att det kan vara svårt för den som inte är heterosexuell att komma ut.", cat:"Sexualitet" },
+      { q:"Vad stod HBTQI för?", options:["Heterosexuella, bisexuella, trogna, queera, inkluderade","Homosexuella, bisexuella, transpersoner, queer, intersexuella","Heterosexuella, bi, trans, queer, intersexuella","Homo, bi, trans, quest, informerade"], correct:1, explanation:"HBTQI = homosexuella, bisexuella, transpersoner, queer och intersexuella. En samlingsterm.", cat:"Sexualitet" },
+      { q:"Kan man ändra sitt juridiska kön i Sverige?", options:["Nej, aldrig","Ja, om man inte känner sig som sitt biologiska kön","Ja, men bara en gång","Nej, bara biologiskt kön kan ändras"], correct:1, explanation:"I Sverige kan man ändra sitt juridiska kön om man inte känner sig som sitt biologiska.", cat:"Kön och könsidentitet" },
+      { q:"Hur stor andel av föräldradagarna tar pappor ut i Sverige idag?", options:["10 %","20 %","30 %","50 %"], correct:2, explanation:"Pappor tar ut ca 30 % av föräldradagarna. Mammor tar ut resterande 70 %.", cat:"Jämställdhet" },
+      { q:"Vad gäller enligt samtyckeslagen från 2018?", options:["Sex kräver skriftligt kontrakt","Samtycke är gränsen mellan frivilligt sex och övergrepp","Enbart vuxna måste ge samtycke","Samtycke gäller bara för gifta par"], correct:1, explanation:"Samtyckeslagen: sex ska vara frivilligt – samtycke krävs. Utan samtycke är det ett brott.", cat:"Jämställdhet" }
+    ],
+    medium: [
+      { q:"Vad är det mest avgörande skälet till löneskillnader mellan könen?", options:["Kvinnor arbetar sämre","Män har mer erfarenhet","Kvinnor och män arbetar i olika yrken och branscher med olika lönenivåer","Arbetsgivare diskriminerar medvetet"], correct:2, explanation:"Den könsuppdelade arbetsmarknaden – att kvinnor och män väljer olika yrken – är den viktigaste förklaringen till lönegapet.", cat:"Jämställdhet" },
+      { q:"Varför kan könsidentitet skilja sig från biologiskt kön?", options:["Det är alltid ett psykologiskt problem","Biologiskt kön bestäms av kroppen, men könsidentitet är en inre känsla som inte alltid stämmer överens","Det beror på hormonella rubbningar","Det är ett kulturellt fenomen utan biologisk grund"], correct:1, explanation:"Könsidentitet är en djup inre känsla av vem man är, som inte nödvändigtvis stämmer med kroppens biologi.", cat:"Kön och könsidentitet" },
+      { q:"Varför är heteronormen ett problem för HBTQI-personer?", options:["Det innebär att heterosexuella har juridiska fördelar","Det gör att andra sexuella läggningar betraktas som avvikande, vilket kan skapa skam och svårigheter att komma ut","Det förbjuder homosexualitet","Det påverkar bara synen på transpersoner"], correct:1, explanation:"Heteronormen innebär att heterosexualitet ses som det normala. Allt annat betraktas som avvikelse, vilket skapar press och svårigheter för HBTQI-personer.", cat:"Sexualitet" },
+      { q:"Varför är 90 dagar föräldrapenning öronmärkta för vardera förälder?", options:["För att fler barn ska bli friskare","Som ett sätt att uppmuntra pappor att ta mer föräldraledighet","Det är ett krav från EU","För att minska sjukskrivningar"], correct:1, explanation:"De öronmärkta dagarna infördes för att öka pappornas uttag av föräldraledigheten och bidra till ett mer jämställt hem.", cat:"Jämställdhet" },
+      { q:"Vad innebär det att sexuell läggning kan vara 'medfödd och stabil'?", options:["Man kan inte välja sin sexualitet och den ändras aldrig","Sexualitet är en grundläggande del av en person som vanligtvis inte förändras av omgivningens påtryckningar","Alla föds med samma sexuella läggning","Sexualitet bestäms vid födseln av generna"], correct:1, explanation:"Forskning tyder på att sexuell läggning inte är ett medvetet val och för de flesta är den stabil – men för vissa ändras den över tid.", cat:"Sexualitet" }
+    ],
+    hard: [
+      { q:"Varför räcker det inte med formell jämställdhet (samma lagar) för att uppnå reell jämställdhet?", options:["Lagar kan inte ändra samhället","Normer, traditioner och strukturer kvarstår och styr beteenden trots lika rättigheter på pappret","Formell jämställdhet räcker alltid","Ekonomin hindrar verklig jämlikhet"], correct:1, explanation:"Lagar skapar formella rättigheter, men djupa normer och strukturer – som den könsuppdelade arbetsmarknaden och olikfördelat hemarbete – kvarstår ändå.", cat:"Jämställdhet" },
+      { q:"Hur kan en persons religiositet komplicera hens sexuella identitet?", options:["Religion och sexualitet är alltid kompatibla","Religion förbjuder aldrig homosexualitet","Inom vissa riktningar är synen på homosexualitet begränsande – troende homosexuella kan tvingas dölja sin identitet","Religionen stärker alltid personens könsidentitet"], correct:2, explanation:"Inom vissa religiösa riktningar accepteras inte homosexualitet, vilket kan tvinga troende homosexuella att leva med en konflikt mellan tro och sexuell identitet.", cat:"Kön och könsidentitet" },
+      { q:"Vad är det strukturella skälet till att fler kvinnor arbetar deltid?", options:["Kvinnor föredrar deltid","Deltid är juridiskt begränsat för män","Dubbelarbetet – ansvar för både jobb och hem – gör heltid svårare för kvinnor","Arbetsgivare tvingar kvinnor till deltid"], correct:2, explanation:"Trots formell jämställdhet tar kvinnor fortfarande mer ansvar för hem och barn, vilket gör att heltidsarbete är svårare att kombinera.", cat:"Jämställdhet" }
+    ]
+  };
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – LIVSSYN – QUIZBANK
+═══════════════════════════════════════════════════════ */
+function getSoLivssynQuizBank() {
+  return {
+    easy: [
+      { q:"Vad är en livssyn?", options:["En politisk åsikt","Hur du ser på livet och vad den synen grundar sig på","En vetenskaplig teori","En form av filosofi utan tro"], correct:1, explanation:"Livssyn = hur man ser på livet och vad som ger det mening. Det kan vara religiöst, filosofiskt eller ideologiskt.", cat:"Livssyn" },
+      { q:"Hur kan religion bli en del av identiteten?", options:["Bara via kläder och utseende","Genom tro, ritualer och gemenskap som definierar vem man är","Bara om man är djupt troende","Bara om man är uppvuxen i ett religiöst land"], correct:1, explanation:"Religion kan forma identiteten via tro, ritualer (gudstjänst, bön) och gemenskap med likasinnade.", cat:"Livssyn" },
+      { q:"Vad menas med att 'ärva' en religion?", options:["Att man ärver pengar från en kyrka","Att man föds in i föräldrarnas religion och anammar den","Att man väljer sin religion vid vuxen ålder","Att man studerar religion på universitetet"], correct:1, explanation:"Familjen kan påverka identiteten starkt – barn föds ofta in i föräldrarnas religion och kan ta den till sig som sin egen.", cat:"Livssyn" },
+      { q:"Vad innebär rotlöshet i ett identitetsperspektiv?", options:["Att man bott på många ställen","Att sakna en djupare grund för identiteten och gemenskapen","Att man inte tillhör ett politiskt parti","Att man inte har ett yrke"], correct:1, explanation:"Utan tro, ideologi eller gemenskap kan en person sakna en grund att stå på, vilket kan skapa osäkerhet kring identiteten.", cat:"Livssyn" },
+      { q:"Vad är en ritual?", options:["En politisk debatt","En återkommande handling kopplad till tro eller tradition","En religiös text","En form av meditation"], correct:1, explanation:"Ritualer är återkommande handlingar – bön, gudstjänst, konfirmation – som stärker tillhörighet och identitet.", cat:"Livssyn" }
+    ],
+    medium: [
+      { q:"Hur kan religiös identitet och sexuell identitet komma i konflikt?", options:["Det är omöjligt – religion accepterar alltid alla","Inom vissa religiösa riktningar är synen på homosexualitet begränsande, vilket skapar inre konflikt","Religion och sexualitet är aldrig kopplade","Det gäller bara i icke-västerländska länder"], correct:1, explanation:"Troende homosexuella kan uppleva konflikt mellan sin tro och sin sexuella identitet, om religionen inte accepterar homosexualitet.", cat:"Livssyn" },
+      { q:"Vad skiljer religiös tro från ideologi?", options:["Ideologi är alltid ateistisk","Religiös tro bygger på gudomlighet och ritualer, ideologi är ett politiskt/samhälleligt tankesystem","De är identiska","Ideologi är mer personlig än religion"], correct:1, explanation:"Religion involverar tro på det gudomliga och ritualer. Ideologi är ett system av idéer om samhälle och politik – ofta utan religiöst inslag.", cat:"Livssyn" },
+      { q:"Varför anser många att religion ger ett 'helhetsperspektiv' som ideologi inte ger?", options:["Religion är vetenskapligt bevisad","Religion ger svar på livets stora frågor med gemenskap, ritualer och en etisk ram – ideologi fokuserar på samhälle","Religion är äldre","Ideologi är mer logisk"], correct:1, explanation:"Religion erbjuder ett komplett system: svar på meningen med livet, ritualer som markerar livets etapper och gemenskap med likasinnade.", cat:"Livssyn" }
+    ],
+    hard: [
+      { q:"Varför kan det vara svårt för troende homosexuella i vissa sammanhang?", options:["Det är lagligt förbjudet","Religiösa normer kan kräva att man döljer sin sexualitet, vilket skapar en splittring i identiteten","Det är alltid accepterat i moderna religioner","Det beror på ekonomisk status"], correct:1, explanation:"Att behöva dölja sin sexuella identitet för att passa religiösa normer skapar psykisk belastning och en splittrande inre konflikt.", cat:"Livssyn" },
+      { q:"Hur kan 'rotlöshet' kopplas till moderna samhällsproblem?", options:["Det är inte kopplat alls","Många menar att minskad religiös tillhörighet skapar rotlöshet – en brist på gemensam grund och mening – som kan bidra till psykisk ohälsa och andra problem","Rotlöshet beror bara på migration","Det är enbart ett individuellt problem"], correct:1, explanation:"En del sociologer menar att nedgången av religiös tillhörighet lämnar ett tomrum: ingen gemenskap, inga ritualer, ingen gemensam berättelse – vilket kan bidra till ohälsa.", cat:"Livssyn" }
+    ]
+  };
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – UTSEENDE – QUIZBANK (placeholder)
+═══════════════════════════════════════════════════════ */
+function getSoUtseendeQuizBank() {
+  return {
+    easy: [
+      { q:"Vad är snabbmode?", options:["Kläder som tillverkas lokalt","Kläder som massproduceras billigt och byts ut ofta med stor miljöpåverkan","Kläder som syns snabbt på catwalken","Kläder som är miljövänliga"], correct:1, explanation:"Snabbmode = billig massproduktion av kläder som bärs kort tid. Det belastar miljön mycket, bl.a. kräver en T-shirt 2700 liter vatten att tillverka.", cat:"Mode och historia" },
+      { q:"Vad är smalhetsnormen?", options:["En lag om klädstorlekar","En norm om att smal kropp är idealet","En historisk klädkod","En reklamkampanj"], correct:1, explanation:"Smalhetsnormen är en samhällsnorm om att smal kropp är det vackra idealet. Den förstärks av sociala medier och reklam.", cat:"Utseendenormer" },
+      { q:"Vad kan kläder signalera om en person?", options:["Enbart inkomst","Samhällsklass, yrke, grupptillhörighet och identitet","Enbart religion","Enbart ålder"], correct:1, explanation:"Kläder kan signalera klass, yrke, subkultur och kulturell tillhörighet – men kan också vara missvisande.", cat:"Kläder och utseende" },
+      { q:"Varför uppstod de franska revolutionärernas klädval som politisk symbol?", options:["Modet var dyrt","Knäbyxor var adelns symbol – långbyxor markerade motstånd mot privilegier","Franska revolutionen förbjöd alla kläder","Det var av praktiska skäl"], correct:1, explanation:"Revolutionärerna (sans-culottes = 'utan knäbyxor') bar långa byxor som symbol mot adelns privilegier. Kläder blev politisk markering.", cat:"Mode och historia" },
+      { q:"Vad är ett skönhetsideal?", options:["En lag om skönhet","En föreställning om hur man borde se ut för att anses vackert","En historisk konstepok","En typ av smink"], correct:1, explanation:"Skönhetsideal = samhällets föreställning om det vackra utseendet. Det varierar mellan kulturer och historiska perioder.", cat:"Utseendenormer" }
+    ],
+    medium: [
+      { q:"Hur kan sociala medier påverka unga och utseendenormer negativt?", options:["Sociala medier visar alltid realistiska bilder","De skapar orealistiska skönhetsideal som kan leda till press, psykisk ohälsa och ätstörningar","De är helt irrelevanta för identitetsskapande","De påverkar bara äldre"], correct:1, explanation:"Sociala medier och influencers förstärker skönhetsideal som är orealistiska, vilket skapar press – framför allt hos unga tjejer.", cat:"Utseendenormer" },
+      { q:"Hur har skönhetsidealet för kvinnokroppen förändrats historiskt?", options:["Det har alltid handlat om smal kropp","Idealet har skiftat – ibland rund, ibland smal beroende på samhälle och tid","Det har alltid handlat om styrka","Det har aldrig förändrats"], correct:1, explanation:"Idealet skiftar med samhällets välstånd: i samhällen med matbrist = rund kropp som statusmarkör. I välståndssamhällen = smal kropp som ideal.", cat:"Utseendenormer" },
+      { q:"Hur hänger kläder ihop med subkulturer?", options:["Subkulturer har inga kläder","Kläder kan markera tillhörighet till en subkultur som vänder sig mot mainstreamnormen","Subkulturer använder bara musik","Det är alltid ett mode utan politisk innebörd"], correct:1, explanation:"Subkulturer använder kläder som symbol för identitet och motkultur – t.ex. punk, hip-hop eller gotiska stilar.", cat:"Kläder och utseende" }
+    ],
+    hard: [
+      { q:"Hur speglar kraven på kvinnokroppen samhällets maktstrukturer?", options:["De är enbart estetiska och opolitiska","Normerna kontrollerar och begränsar kvinnors frihet och är ett uttryck för patriarkala strukturer","De beror bara på media","De gäller enbart i specifika länder"], correct:1, explanation:"Historiskt har normerna för hur en kvinna 'borde' se ut – korsett, smalhet, smink – fungerat som kontroll över kvinnokroppen och som ett uttryck för samhällets maktrelationer.", cat:"Utseendenormer" },
+      { q:"Varför är miljöperspektivet viktigt i modedebatten?", options:["Mode har ingen miljöpåverkan","Klädindustrin är en av världens mest resursintensiva industrier och snabbmode förstärker överkonsumtionen","Det gäller bara lyxmode","Det är ett problem bara i fattiga länder"], correct:1, explanation:"Klädindustrin är enormt resurskrävande. Snabbmode ökar konsumtionen dramatiskt och skapar textilbegravningsplatser i t.ex. Chile och Ghana.", cat:"Mode och historia" }
+    ]
+  };
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – LUCKTEXTER
+═══════════════════════════════════════════════════════ */
+function getSoIdentitetLucktext() {
+  return [
+    { text:'Ordet identitet kommer från latinen och betyder [samma].', answers:['samma','idem'], hint:'Tänk på legitimation – du identifierar dig som den du säger att du är', explain:'Identitet = att vara densamma. Vi använder id-handlingar för att bekräfta att vi är den person vi påstår oss vara.' },
+    { text:'[Självbild] är din egen bild av vem du är.', answers:['självbild','självuppfattning'], hint:'Det börjar med "själv"', explain:'Självbilden formas av dig själv, av människor omkring dig och av samhällets trender. Den kan förändras under livet.' },
+    { text:'Identitet kan delas upp i [medfödd] och självvald identitet.', answers:['medfödd','biologisk'], hint:'Vad har du fötts med?', explain:'Medfödd identitet = egenskaper och anlag du föds med. Självvald = saker du aktivt väljer, som intressen och klädstil.' },
+    { text:'[Integritet] är rätten till en privat sfär och att inte behöva dela känsliga uppgifter om sig själv.', answers:['integritet'], hint:'Rätten till privatliv', explain:'Integritet innebär att ingen ska tvingas avslöja privat information om sig själv. Det skyddar individen.' },
+    { text:'[Normer] är oskrivna regler i ett samhälle som påverkar hur vi beter oss.', answers:['normer','norm'], hint:'De är inte nedskrivna men alla vet om dem', explain:'Normer styr beteenden och förväntningar i samhället. De kan vara positiva men också förtryckande mot grupper som inte passar in.' },
+    { text:'Självkänsla handlar om att "vara" – om man [duger] som man är som människa.', answers:['duger','räcker','passar'], hint:'Anser du att du är värd kärlek och omsorg?', explain:'Självkänsla handlar om det djupaste – att känna sig värdefull som människa, oavsett prestationer.' },
+    { text:'Självförtroende är tron på att det man gör och [tänker] är rätt och bra.', answers:['tänker','klarar'], hint:'Det handlar om prestation', explain:'Självförtroende är mer ytligt – det handlar om vad man klarar av att göra, inte om hur man ser på sig som människa.' },
+    { text:'En identitetskris kan uppstå vid förändringar som [flytt], byte av skola eller skilsmässa.', answers:['flytt','att flytta'], hint:'Att byta boendeort', explain:'Identitetskriser uppstår när livet förändras kraftigt och den bild man haft av sig själv inte längre stämmer.' },
+    { text:'Rätten till sin identitet finns inskriven i [barnkonventionen].', answers:['barnkonventionen'], hint:'FN:s dokument för barns rättigheter', explain:'FN:s barnkonvention ger barn rätt att ha sin identitet – inklusive namn, nationalitet och familjerelationer.' },
+    { text:'Personliga egenskaper, sexualitet och kroppsliga anlag är exempel på [medfödd] identitet.', answers:['medfödd','biologisk'], hint:'Det är något du föds med', explain:'Medfödd identitet är de egenskaper som följer med en från födseln och som man inte medvetet väljer.' },
+    { text:'Intressen, klädstil och värderingar är exempel på [självvald] identitet.', answers:['självvald','vald','frivillig'], hint:'Saker du aktivt väljer', explain:'Självvald identitet är de aspekter av vem du är som du aktivt väljer – som vilka kläder du bär eller vilka värderingar du håller.' },
+    { text:'Man kan ha bra [självförtroende] men ändå svag självkänsla.', answers:['självförtroende'], hint:'Tron på att klara uppgifter', explain:'Det är möjligt att vara duktig och prestera väl (självförtroende) men ändå inte tycka om sig själv som människa (självkänsla).' }
+  ];
+}
+
+function getSoKonLucktext() {
+  return [
+    { text:'[Biologiskt] kön bestäms av könskromosomer och könsorgan vid födseln.', answers:['biologiskt'], hint:'Det som bestäms av kroppen', explain:'Biologiskt kön är det kön du föds med, bestämt av dina könskromosomer (XX eller XY) och könsorgan.' },
+    { text:'[Juridiskt] kön är det kön som registreras hos myndigheter.', answers:['juridiskt'], hint:'Det som finns i passet', explain:'Det juridiska könet är det officiella kön som staten registrerar. I Sverige kan man ändra det om man inte känner sig som sitt biologiska.' },
+    { text:'[Könsidentitet] är det kön en människa känner sig bekväm i.', answers:['könsidentitet'], hint:'Den inre känslan av vad man är', explain:'Könsidentitet är den djupa inre känslan av att vara man, kvinna eller något annat – oberoende av biologi.' },
+    { text:'En person vars könsidentitet skiljer sig från det biologiska kallas ibland [transperson].', answers:['transperson','trans'], hint:'Börjar med trans-', explain:'Transpersoner är de vars könsidentitet inte stämmer med det kön de tilldelades vid födseln.' },
+    { text:'[Jämställdhet] innebär att alla ska ha samma möjligheter oavsett kön.', answers:['jämställdhet'], hint:'Lika rättigheter för alla kön', explain:'Jämställdhet handlar om att ingen ska diskrimineras eller ha sämre möjligheter på grund av kön.' },
+    { text:'I Sverige finns det [två] juridiska kön: man och kvinna.', answers:['två','2'], hint:'Räkna dem: man och kvinna', explain:'I Sverige finns för närvarande två juridiska kön. I vissa andra länder finns en tredje kategori för de som inte definierar sig som varken man eller kvinna.' },
+    { text:'Pappor i Sverige tar idag ut ca [30] procent av föräldradagarna.', answers:['30','trettio'], hint:'Under hälften men mer än en fjärdedel', explain:'Av föräldraledigheten tar pappor ut ca 30 % och mammor 70 %. 90 dagar är öronmärkta för vardera förälder för att öka jämlikheten.' },
+    { text:'[Samtyckeslagen] trädde i kraft i Sverige den 1 juli 2018.', answers:['samtyckeslagen','samtycke'], hint:'Handlar om frivillighet vid sex', explain:'Samtyckeslagen innebär att sex måste vara frivilligt. Samtycke är gränsen mellan frivilligt sex och brott.' }
+  ];
+}
+
+function getSoLivssynLucktext() {
+  return [
+    { text:'En [livssyn] är hur du ser på livet och vad den synen grundar sig på.', answers:['livssyn'], hint:'Handlar om hur man ser på livet', explain:'Livssyn kan vara religiös tro, en filosofi eller en ideologi. Den är en del av identiteten.' },
+    { text:'Religion är en viktig [gemenskap] för många och har i alla tider varit grunden i människors liv.', answers:['gemenskap'], hint:'Att höra ihop med andra', explain:'Religion ger inte bara tro – den ger tillhörighet och gemenskap med likasinnade, vilket är viktigt för identiteten.' },
+    { text:'Att gå på [gudstjänst] är ett exempel på ett ritual kopplat till religiös identitet.', answers:['gudstjänst','kyrka'], hint:'En religiös samling', explain:'Ritualer som gudstjänst stärker den religiösa identiteten och känslan av tillhörighet till en gemenskap.' },
+    { text:'Familjen kan påverka ens identitet genom att man "[ärver]" en religion.', answers:['ärver','ärvt','ärvde'], hint:'Vad man tar med sig från sina föräldrar utan att välja det', explain:'Barn föds in i föräldrarnas religion och tar ofta den till sig som sin egen utan att aktivt ha valt den.' },
+    { text:'Utan tro kan en människa känna [rotlöshet] och sakna en grund att stå på.', answers:['rotlöshet','rotlös'], hint:'Känslan av att sakna en grund', explain:'Rotlöshet = att sakna en djupare grund och gemenskap att definiera sin identitet utifrån.' }
+  ];
+}
+
+function getSoUtseendeLucktext() {
+  return [
+    { text:'Kläder kan visa vilken [samhällsklass] vi hör till.', answers:['samhällsklass','klass'], hint:'Ekonomisk och social position i samhället', explain:'Kläder har historiskt signalerat social position. Överklassen hade råd med dyra material och modestilar som underklassen inte fick använda.' },
+    { text:'En [subkultur] är en grupp som via klädstil vänder sig mot den rådande normen.', answers:['subkultur'], hint:'En grupp med egna normer mot mainstream', explain:'Subkulturer som punk, hip-hop och goth använder kläder för att markera en alternativ identitet mot det dominerande samhällets normer.' },
+    { text:'[Snabbmode] innebär att kläder massproduceras billigt och byts ut ofta.', answers:['snabbmode','fast fashion'], hint:'Kläder som man kastas snabbt', explain:'Snabbmode är miljöbelastande och skapar en kultur där kläder behandlas som engångsprodukter.' },
+    { text:'[Smalhetsnormen] är ett ideal om att en smal kropp är det vackra.', answers:['smalhetsnormen','smalhet'], hint:'En norm om kroppsvikt', explain:'Smalhetsnormen förstärks av sociala medier och reklam och kan bidra till psykisk ohälsa och ätstörningar.' },
+    { text:'Under franska revolutionen bar revolutionärerna långa [byxor] som symbol mot adeln.', answers:['byxor','långbyxor'], hint:'Klädesplagget som markerade motstånd', explain:'Sans-culottes = utan knäbyxor. De bar långa byxor medan adeln hade knäbyxor. Kläderna blev politiska symboler.' }
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – KOPPLINGSKORT
+═══════════════════════════════════════════════════════ */
+function getSoKopplingar() {
+  return [
+    { cat:'Identitetsbegrepp', pairs:[
+      ['Identitet','Vem du är – format av inre och yttre faktorer'],
+      ['Självbild','Din egen bild av vem du är'],
+      ['Integritet','Rätten till en privat sfär'],
+      ['Normer','Oskrivna regler i samhället'],
+      ['Självkänsla','Hur du känner för dig själv som människa'],
+      ['Självförtroende','Tron på att det du gör är rätt']
+    ]},
+    { cat:'Medfödd vs Självvald identitet', pairs:[
+      ['Medfödd – personliga egenskaper','Hur du är som person, t.ex. introvert/extrovert'],
+      ['Medfödd – sexualitet','Sexuell läggning kan vara medfödd och stabil'],
+      ['Självvald – intressen','Vad du väljer att ägna din tid åt'],
+      ['Självvald – klädstil','Hur du väljer att klä dig'],
+      ['Självvald – värderingar','Vad du tror på och tycker är viktigt'],
+      ['Identitetskris','När förändringar rubbar bilden av vem man är']
+    ]},
+    { cat:'Kön och identitet', pairs:[
+      ['Biologiskt kön','Bestäms av kromosomer och könsorgan vid födseln'],
+      ['Juridiskt kön','Det kön som registreras av myndigheter'],
+      ['Könsidentitet','Det kön en person känner sig bekväm i'],
+      ['Transperson','Person vars könsidentitet skiljer sig från biologiskt kön'],
+      ['Jämställdhet','Lika möjligheter och rättigheter oavsett kön'],
+      ['HBTQI','Homo-, bisexuella, transpersoner, queer, intersexuella']
+    ]},
+    { cat:'Livssyn och religion', pairs:[
+      ['Livssyn','Hur du ser på livet och vad den synen grundar sig på'],
+      ['Ritual','Återkommande handling kopplad till tro eller tradition'],
+      ['Gemenskap','Viktig del av religiös identitet – att höra till en grupp'],
+      ['Rotlöshet','Att sakna en djupare grund för identiteten'],
+      ['Ärva religion','Att ta över föräldrarnas tro utan att aktivt välja den'],
+      ['Ideologi','Politiskt/samhälleligt tankesystem som alternativ till religion']
+    ]},
+    { cat:'Normer och samhälle', pairs:[
+      ['Heteronormen','Samhällets norm att heterosexualitet är det normala'],
+      ['Smalhetsnormen','Idealet om att en smal kropp är det vackra'],
+      ['Subkultur','Grupp som via stil vänder sig mot rådande normer'],
+      ['Vi och dom','Grupptänkande som utesluter dem som inte passar in'],
+      ['Samtyckeslag','Lag från 2018 – sex ska vara frivilligt'],
+      ['Snabbmode','Billiga kläder som byts ut snabbt med miljöpåverkan']
+    ]}
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – INSTUDERINGSFRÅGOR
+═══════════════════════════════════════════════════════ */
+function getSoInstudering() {
+  return [
+    { cat:'Identitet – grunder', q:'Vad menas med identitet?', a:'Identitet handlar om vem man är. Ordet kommer från latinet och betyder "samma". Det är svaret på frågan Vem är jag? – och svaret kan förändras under livets gång.' },
+    { cat:'Identitet – grunder', q:'Vad är skillnaden mellan medfödd och självvald identitet? Ge exempel.', a:'Medfödd identitet: personliga egenskaper, sexualitet, kroppsliga anlag – saker man föds med. Självvald identitet: intressen, klädstil, värderingar och språk – saker man aktivt väljer.' },
+    { cat:'Identitet – grunder', q:'Vad är självbild?', a:'Självbild är din egen bild av vem du är. Den formas av dig själv, av människor omkring dig och av trender i samhället.' },
+    { cat:'Identitet – grunder', q:'Vad är skillnaden mellan självkänsla och självförtroende?', a:'Självkänsla handlar om att vara – om man duger som människa. Självförtroende handlar om att göra – tron på att man klarar uppgifter. Man kan ha högt självförtroende men låg självkänsla.' },
+    { cat:'Identitet – grunder', q:'Vad är integritet?', a:'Rätten till en privat sfär, psykiskt och fysiskt, och rätten att inte behöva dela känsliga uppgifter om sig själv.' },
+    { cat:'Identitet – grunder', q:'Vad är normer och vilken roll spelar de?', a:'Normer är oskrivna regler i samhället. De underlättar samspel mellan människor, men kan i olika sammanhang bli förtryckande mot vissa grupper.' },
+    { cat:'Kön och sexualitet', q:'Vad är skillnaden mellan biologiskt kön, juridiskt kön och könsidentitet?', a:'Biologiskt kön = kromosomer och könsorgan vid födseln. Juridiskt kön = registrerat av myndigheter. Könsidentitet = det kön en människa innerst inne känner sig som.' },
+    { cat:'Kön och sexualitet', q:'Vad kallas en person vars könsidentitet skiljer sig från det biologiska könet?', a:'Transperson.' },
+    { cat:'Kön och sexualitet', q:'Vad innebär jämställdhet?', a:'Att alla ska ha samma möjligheter och rättigheter oavsett kön, och inte diskrimineras på grund av kön eller sexualitet.' },
+    { cat:'Kön och sexualitet', q:'Vad innebär samtyckeslagen?', a:'Lagen som trädde i kraft 2018 innebär att sex ska vara frivilligt – samtycke är gränsen mellan frivilligt sex och sexuellt övergrepp.' },
+    { cat:'Livssyn och religion', q:'Vad är en livssyn? Ge exempel.', a:'En livssyn är hur du ser på livet och vad den synen grundar sig på – t.ex. religiös tro, en filosofi eller en ideologi.' },
+    { cat:'Livssyn och religion', q:'Hur kan religion forma identiteten?', a:'Genom tro, ritualer (t.ex. gudstjänst) och gemenskap med likasinnade. Familjen kan även påverka identiteten genom att man "ärver" en religion.' },
+    { cat:'Livssyn och religion', q:'Vad menas med rotlöshet i ett identitetssammanhang?', a:'Att en människa utan tro eller ideologi kan sakna en djupare grund att stå på – en gemenskap och ett helhetsperspektiv att definiera sig utifrån.' },
+    { cat:'Utseende och normer', q:'Hur kan kläder uttrycka identitet?', a:'Kläder, smycken, frisyrer och smink hjälper oss att visa vem vi är. De kan signalera klass, yrke, grupptillhörighet och kulturell bakgrund.' },
+    { cat:'Utseende och normer', q:'Vad är smalhetsnormen?', a:'En samhällsnorm om att smal kropp är det vackra idealet. Den förstärks av sociala medier och reklam och kan bidra till psykisk ohälsa.' }
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – SKRIVÖVNINGAR
+═══════════════════════════════════════════════════════ */
+function getSoSkrivfragor() {
+  return [
+    { q:'Förklara skillnaden mellan självkänsla och självförtroende. Ge ett exempel på en person som har högt självförtroende men låg självkänsla.', keywords:['självkänsla','vara','människa','självförtroende','göra','prestera'], topic:'Identitet' },
+    { q:'Vad menas med medfödd och självvald identitet? Ge minst två exempel på vardera.', keywords:['medfödd','egenskaper','sexualitet','självvald','intressen','klädstil'], topic:'Identitet' },
+    { q:'Förklara vad normer är och ge ett exempel på hur en norm kan vara både positiv och negativ.', keywords:['norm','oskrivna','samhälle','positiv','negativ','förtryck'], topic:'Normer' },
+    { q:'Vad är skillnaden mellan biologiskt kön, juridiskt kön och könsidentitet?', keywords:['biologiskt','kromosomer','juridiskt','myndigheter','könsidentitet','känsla'], topic:'Kön' },
+    { q:'Förklara vad jämställdhet innebär och ge ett konkret exempel på ojämställdhet i Sverige idag.', keywords:['jämställdhet','rättigheter','möjligheter','lön','föräldraledighet','klass'], topic:'Jämställdhet' },
+    { q:'Hur kan religion bli en del av en persons identitet? Vad menas med att man "ärver" en religion?', keywords:['religion','gemenskap','ritual','ärver','föräldrar','identitet'], topic:'Livssyn' },
+    { q:'Varför kan kläder och mode vara viktiga för identiteten? Ge ett exempel på en subkultur och vad den vill uttrycka.', keywords:['kläder','identitet','tillhörighet','subkultur','norm','uttrycka'], topic:'Utseende' },
+    { q:'Vad är en identitetskris och vad kan utlösa en? Ge ett exempel.', keywords:['identitetskris','förändring','flytt','skilsmässa','krig','sjukdom'], topic:'Identitet' }
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SO – MINNESPALATS (kopplas till PALATS_DATA längre ner)
+═══════════════════════════════════════════════════════ */
+const SO_PALATS = [
+  { id:'identitet-grunder-palats', icon:'🪞', name:'Identitet – grunder', color:'#8b3a8b', bg:'#f5edf5',
+    terms:[
+      { w:'Identitet', d:'Vem du är – format av inre och yttre faktorer, kan förändras under livet' },
+      { w:'Självbild', d:'Din bild av vem du är, påverkas av omgivning och samhällstrender' },
+      { w:'Integritet', d:'Rätten till en privat sfär och att inte behöva dela känslig information' },
+      { w:'Normer', d:'Oskrivna regler som styr samspelet i samhället' },
+      { w:'Självkänsla', d:'Hur du känner för dig själv – att duga som människa' },
+      { w:'Självförtroende', d:'Tron på att det du gör är rätt – handlar om prestation' }
+    ],
+    link:'Jämför: självkänsla = att vara, självförtroende = att göra' },
+  { id:'kon-sexualitet-palats', icon:'⚖️', name:'Kön & sexualitet', color:'#b5451b', bg:'#f9ede8',
+    terms:[
+      { w:'Biologiskt kön', d:'Bestäms av könskromosomer och könsorgan vid födseln' },
+      { w:'Juridiskt kön', d:'Det kön som registreras av myndigheter – kan ändras i Sverige' },
+      { w:'Könsidentitet', d:'Det kön man innerst inne känner sig som' },
+      { w:'Transperson', d:'Person vars könsidentitet skiljer sig från biologiskt/juridiskt kön' },
+      { w:'Jämställdhet', d:'Lika möjligheter och rättigheter oavsett kön' },
+      { w:'Samtyckeslag', d:'Lag 2018: sex ska vara frivilligt – annars är det brott' }
+    ],
+    link:'Biologiskt → juridiskt → könsidentitet: tre olika nivåer av kön' },
+  { id:'livssyn-palats', icon:'✝️', name:'Livssyn & religion', color:'#3d5a80', bg:'#eef2f7',
+    terms:[
+      { w:'Livssyn', d:'Hur du ser på livet – religiöst, filosofiskt eller ideologiskt' },
+      { w:'Ritual', d:'Återkommande handling kopplad till tro – stärker identitet och tillhörighet' },
+      { w:'Gemenskap', d:'Viktig del av religionen – att höra till och dela tro med andra' },
+      { w:'Rotlöshet', d:'Att sakna en djupare grund för identiteten utan tro eller ideologi' },
+      { w:'Ärva religion', d:'Att ta över föräldrarnas tro utan att aktivt välja den' }
+    ],
+    link:'Religion ger svar på: Vem är jag? Varför finns jag? Vad händer efter döden?' },
+  { id:'utseende-palats', icon:'👗', name:'Utseende & normer', color:'#1d6e5e', bg:'#eaf3f1',
+    terms:[
+      { w:'Smalhetsnormen', d:'Ideal om att smal kropp är vacker – förstärks av sociala medier' },
+      { w:'Subkultur', d:'Grupp som via kläder vänder sig mot mainstreamnormen' },
+      { w:'Snabbmode', d:'Billiga kläder med kort livslängd – stor miljöbelastning' },
+      { w:'Skönhetsideal', d:'Samhällets föreställning om det vackra – varierar i tid och rum' }
+    ],
+    link:'Kläder = identitet + tillhörighet + motkultur' }
+];
+
+/* ═══════════════════════════════════════════════════════
+   SO – QUIZBANK KOPPLINGAR
+═══════════════════════════════════════════════════════ */
+DATA.subjects[1].topics[0].quizBank = getSoIdentitetQuizBank();
+// Lägg till fler frågor från de andra bankarna i samma bank
+(function() {
+  const b = DATA.subjects[1].topics[0].quizBank;
+  const kon = getSoKonQuizBank();
+  const liv = getSoLivssynQuizBank();
+  const uts = getSoUtseendeQuizBank();
+  b.easy   = [...b.easy,   ...kon.easy,   ...liv.easy,   ...uts.easy];
+  b.medium = [...b.medium, ...kon.medium, ...liv.medium, ...uts.medium];
+  b.hard   = [...b.hard,   ...kon.hard,   ...liv.hard,   ...uts.hard];
+})();
 
 /* ═══════════════════════════════════════════════════════
    MÄNNISKOKROPPEN – LUCKTEXT
@@ -2731,18 +3069,7 @@ function getMkroppenLucktext() {
     { text:'Njurarna filtrerar blodet och gifter lämnar kroppen med [urinen].', answers:['urinen','urin'], hint:'Den vätskan vi producerar i blåsan', explain:'Njurarna filtrerar mer än 1 liter blod per minut. Gifter och avfall hamnar i urinen; nyttiga ämnen som glukos återresorberas till blodet.' },
     { text:'Levern bryter ner giftiga ämnen och kan också lagra glukos som [glykogen].', answers:['glykogen'], hint:'Det är reservformen av socker', explain:'Levern fungerar som kroppens kemifabrik och lager. Den lagrar glykogen (glukos i kedjor) och bryter ner det när kroppen behöver energi snabbt.' },
     { text:'Celldelning gör att en cell delar sig och bildar [två] likadana celler.', answers:['två','2'], hint:'Det är ett enkelt siffersvar', explain:'Vid celldelning kopieras allt DNA och cellen delar sig på mitten. Varje dygn dör och ersätts mer än ett kilo celler i kroppen.' },
-    { text:'Blodplättar hjälper till att stoppa blödningar genom att klibba ihop och bilda en [propp].', answers:['propp'], hint:'De tätar skadan', explain:'Vid ett sår drar blodkärlet ihop sig, blodplättarna klibbar samman och ett nätverk av fibrin fångar röda blodkroppar – tillsammans bildar de en sårpropp.' },
-    { text:'En vuxen människa har mellan 4 och [6] liter blod.', answers:['6','sex'], hint:'Tänk hur många literflaskor det vore', explain:'Mängden blod varierar med kroppsstorlek, men 4–6 liter är normalt för en vuxen. Blodet fyller ett helt system av blodkärl som är miltals långa.' },
-    { text:'Mer än hälften av blodet är [blodplasma] – en vätska med vatten, salt och näringsämnen.', answers:['blodplasma','plasma'], hint:'Det gula/klara i blodet', explain:'Blodplasma utgör ca 55% av blodet. Resten (45%) är blodkroppar. Plasmat transporterar näring, hormoner och avfallsprodukter.' },
-    { text:'Hemoglobin innehåller [järn] – därför är det viktigt att äta järnrik mat!', answers:['järn'], hint:'Ett mineral som finns i kött och bönor', explain:'Järnet i hemoglobin är det som binder syremolekylerna. Järnbrist leder till blodbrist (anemi) med symptom som trötthet, blekhet och andfåddhet.' },
-    { text:'Idrottsmän kan träna på hög höjd för att öka mängden röda blodkroppar – det kallas naturlig [bloddopning].', answers:['bloddopning'], hint:'En metod att förbättra syretransporten', explain:'På hög höjd är luften tunnare och kroppen reagerar med att bilda fler röda blodkroppar. Mer röda blodkroppar = mer syre kan transporteras = bättre uthållighet.' },
-    { text:'Det som skiljer blodgrupperna åt är små proteiner som kallas [antigener].', answers:['antigener'], hint:'De sitter på blodkropparnas yta', explain:'Antigener är proteinmarkörer på röda blodkroppars yta. Blodgrupp A har A-antigener, B har B-antigener, AB har båda och 0 har inga.' },
-    { text:'I blodet finns [antikroppar] som angriper en viss typ av antigen.', answers:['antikroppar'], hint:'De är immunsystemets vapen mot fel blod', explain:'Antikroppar i plasman reagerar mot antigener de inte känner igen. Blodgrupp B har t.ex. Anti-A antikroppar som attackerar A-antigener.' },
-    { text:'Blodtrycket är det tryck som uppstår i blodkärlen när hjärtat [pumpar] ut blodet.', answers:['pumpar'], hint:'Hjärtat är en muskel som…', explain:'Varje gång hjärtat drar ihop sig skapas ett tryck i blodkärlen. Det högre värdet (t.ex. 120) mäts vid sammandragning, det lägre (t.ex. 80) vid vila.' },
-    { text:'Högt blodtryck räknas som över [140]/90 mm Hg och ökar risken för hjärtattack och stroke.', answers:['140'], hint:'Ett av gränsvärdet för högt blodtryck', explain:'Högt blodtryck (hypertoni) belastar blodkärlens väggar och kan leda till ateroskleros, stroke, hjärtattack och njurskador.' },
-    { text:'I levern finns [enzymer] som kan bryta ner skadliga ämnen som alkohol och läkemedel.', answers:['enzymer'], hint:'Proteiner som påskyndar kemiska reaktioner', explain:'Leverns enzymer omvandlar giftiga ämnen till mindre farliga ämnen som sedan kan transporteras vidare till njurarna eller lämna via gallan.' },
-    { text:'Levern lagrar vitaminer som D-vitamin, A-vitamin och [B12]-vitamin.', answers:['b12','b12-vitamin','b-12'], hint:'Det vitamin som är extra viktigt för blodbildning', explain:'Levern fungerar som ett vitaminlager. B12 är viktigt för blodbildning, D-vitamin för skelettet och A-vitamin för synen. Dessa lagras och kan räcka i månader.' },
-    { text:'I njurarna finns filterenheter som kallas [nefroner].', answers:['nefroner'], hint:'Njurens minsta filterenhet', explain:'En njure innehåller ungefär en miljon nefroner! Varje nefron filtrerar blodet, och det renade blodet förs tillbaka till kroppen medan avfall bildar urin.' }
+    { text:'Blodplättar hjälper till att stoppa blödningar genom att klibba ihop och bilda en [propp].', answers:['propp'], hint:'De tätar skadan', explain:'Vid ett sår drar blodkärlet ihop sig, blodplättarna klibbar samman och ett nätverk av fibrin fångar röda blodkroppar – tillsammans bildar de en sårpropp.' }
   ];
 }
 
@@ -2790,30 +3117,6 @@ function getMkroppenKopplingar() {
       ['Blodplasma','Trögflytande vätska som bär blodkropparna'],
       ['Blodgrupp O','Universell givare – kan ge blod till alla'],
       ['Blodgrupp AB','Universell mottagare – kan ta emot från alla']
-    ]},
-    { cat:'Blodgrupper och immun', pairs:[
-      ['Antigen','Litet protein på blodkropparnas yta som skiljer blodgrupper åt'],
-      ['Antikropp','Ämne i plasma som angriper "fel" antigener'],
-      ['Blodgrupp A','Har A-antigener och Anti-B antikroppar'],
-      ['Blodgrupp B','Har B-antigener och Anti-A antikroppar'],
-      ['Makrofager','Ätarceller – äter upp inkräktare och döda celler'],
-      ['B-celler','Vita blodkroppar som producerar antikroppar']
-    ]},
-    { cat:'Blodtrycket', pairs:[
-      ['Blodtryck','Trycket i blodkärlen när hjärtat pumpar'],
-      ['mm Hg','Enheten blodtryck mäts i'],
-      ['140/90','Gräns för högt blodtryck'],
-      ['90/60','Gräns för lågt blodtryck (med symptom)'],
-      ['Stroke','Risk vid högt blodtryck – blodpropp i hjärnan'],
-      ['Svimningskänsla','Symptom vid lågt blodtryck']
-    ]},
-    { cat:'Lever och njurar', pairs:[
-      ['Levern','Bryter ner gifter, lagrar glykogen och producerar galla'],
-      ['Njurarna','Filtrerar blodet, tillverkar urin, reglerar vätskebalansen'],
-      ['Nefroner','Njurarnas filterenheter'],
-      ['Glykogen','Glukos lagrat i levern som reservenergi'],
-      ['Urinblåsan','Samlar urinen tills den kissas ut'],
-      ['Gallblåsan','Lagrar galla som producerats i levern']
     ]}
   ];
 }
@@ -2841,15 +3144,7 @@ function getMkroppenInstudering() {
     { cat:'Hjärtat och blodomloppet', q:'Hur kan blodets pH-värde ändras om vi håller andan? Förklara också varför.', a:'Blodets pH-värde kan sänkas om vi håller andan. Det beror på att förbränningen i cellerna fortgår och producerar koldioxid. När vi inte kan andas ut koldioxid löses den i blodet och bildar kolsyra, som sänker pH.' },
     { cat:'Blodgrupper och blodets rening', q:'Vad innebär AB0-systemet?', a:'Det innebär att vi har fyra olika blodgrupper: A, B, AB och 0. De skiljer sig åt genom vilka antigener som sitter på de röda blodkropparna. I blodplasman kan det också finnas antikroppar som reagerar mot "fel" antigener.' },
     { cat:'Blodgrupper och blodets rening', q:'En person med blodgrupp B behöver blod. Från vilka blodgrupper kan den personen ta emot blod?', a:'En person med blodgrupp B har B-antigener och A-antikroppar. Det innebär att personen inte kan ta emot blod med A-antigener. Personen kan ta emot blod från blodgrupp B eller blodgrupp 0.' },
-    { cat:'Blodgrupper och blodets rening', q:'Hur renas blodet?', a:'Blodet renas i levern och njurarna. I levern finns enzymer som bryter ner giftiga ämnen. I njurarna filtreras blodet – gifter lämnar kroppen med urinen och näring återförs till blodet.' },
-    { cat:'Blodets funktion och innehåll', q:'Vilka uppgifter har blodet i kroppen?', a:'Blodet transporterar syre till cellerna, koldioxid till lungorna, och näringsämnen och restprodukter till och från cellerna. Det ingår i immunförsvaret, reglerar kroppstemperaturen och ser till att blodet levrar sig om ett blodkärl är skadat.' },
-    { cat:'Blodets funktion och innehåll', q:'Vad innehåller blodet?', a:'Blodet består till ca 55% av blodplasma (vätska med vatten, salt och näringsämnen) och till ca 45% av blodkroppar (röda blodkroppar, vita blodkroppar och blodplättar). Blodkroppar bildas från blodstamceller i benmärgen.' },
-    { cat:'Blodets funktion och innehåll', q:'Vad är hemoglobin och varför behövs järn?', a:'Hemoglobin är ett protein i röda blodkroppar som binder och transporterar syre. Hemoglobin innehåller järn – det är järnet som binder syret. Järnbrist leder till blodbrist (anemi) med symptom som trötthet och blekhet.' },
-    { cat:'Blodets funktion och innehåll', q:'Beskriv hur kroppen stoppar en blödning (sårläkning).', a:'1. Blodkärlet drar ihop sig och minskar blödningen. 2. Blodplättar klibbar ihop vid skadan. 3. Proteintrådar (fibrin) bildas som ett nät. 4. Röda blodkroppar fastnar i nätet. 5. Utanpå såret bildas en sårskroppa av blodplättar och torkade röda blodkroppar.' },
-    { cat:'Blodomlopp och blodtrycket', q:'Vad är blodtrycket?', a:'Blodtrycket är det tryck som uppstår i blodkärlen när hjärtat pumpar ut blodet i kroppen. Det mäts i mm Hg. Det högre värdet uppstår vid hjärtats sammandragning och det lägre när hjärtat vilar.' },
-    { cat:'Blodomlopp och blodtrycket', q:'Vad är normalt, högt och lågt blodtryck?', a:'Normalt blodtryck är under 140/90 mm Hg vid vila. Högt blodtryck är över 140/90 – ökar risken för hjärt-kärlsjukdomar och stroke. Lågt blodtryck är under 90/60 med symptom (svimningskänsla, yr, kallsvettas, svag).' },
-    { cat:'Blodets rening', q:'Vilka är leverns fyra huvudsakliga funktioner?', a:'1. Rena blodet från skadliga ämnen (enzymer bryter ner t.ex. alkohol och läkemedel). 2. Lagra glukos i form av glykogen. 3. Producera galla som lagras i gallblåsan. 4. Lagra vitaminer som D-vitamin, A-vitamin och B12.' },
-    { cat:'Blodets rening', q:'Hur fungerar njurarna?', a:'I njurarna finns nefroner. I nefronerna filtreras blodet från avfallsprodukter och urin bildas som består av vatten och avfall. Det renade blodet förs tillbaka till blodomloppet. Urinet transporteras till urinblåsan och kissas ut genom urinröret.' }
+    { cat:'Blodgrupper och blodets rening', q:'Hur renas blodet?', a:'Blodet renas i levern och njurarna. I levern finns enzymer som bryter ner giftiga ämnen. I njurarna filtreras blodet – gifter lämnar kroppen med urinen och näring återförs till blodet.' }
   ];
 }
 
@@ -2867,10 +3162,7 @@ function getMkroppenSkrivfragor() {
     { q:'Vad händer med koldioxid i kroppen om vi håller andan? Förklara kemiskt.', keywords:['koldioxid','kolsyra','pH','blodet','försuras','andas ut'], topic:'Andning' },
     { q:'Beskriv hur njurarna och levern rensar blodet.', keywords:['levern','njurarna','gifter','urin','filtrera','glukos'], topic:'Blodgrupper och blodets rening' },
     { q:'Varför har tunntarmen tarmludd och varför är det viktigt?', keywords:['tarmludd','yta','blodkärl','kapillärer','näring','tennisplan'], topic:'Matspjälkning' },
-    { q:'Beskriv cellens delar och deras funktioner som om du förklarar för en kompis.', keywords:['cellkärna','mitokondrie','ribosom','lysosom','cellmembran','DNA'], topic:'Cellen' },
-    { q:'Vad är blodtryck och vad är skillnaden mellan högt och lågt blodtryck? Vilka risker finns?', keywords:['blodtryck','mm Hg','högt','lågt','stroke','hjärtattack','svimning'], topic:'Blodtrycket' },
-    { q:'Förklara vad röda blodkroppar gör och varför järn är viktigt för dem.', keywords:['hemoglobin','järn','syre','blodkroppar','anemi','blodbrist'], topic:'Blodets funktion och innehåll' },
-    { q:'Beskriv steg för steg vad som händer när du skär dig i fingret och kroppen läker såret.', keywords:['blodkärl','blodplättar','fibrin','propp','sårskroppa','koagulerar'], topic:'Blodets funktion och innehåll' }
+    { q:'Beskriv cellens delar och deras funktioner som om du förklarar för en kompis.', keywords:['cellkärna','mitokondrie','ribosom','lysosom','cellmembran','DNA'], topic:'Cellen' }
   ];
 }
 
@@ -3295,6 +3587,7 @@ let ltState = { sentences:[], score:0, total:0, hintsUsed:new Set() };
 
 function getLucktextForTopic(id) {
   if (id === 'manniskokroppen') return getMkroppenLucktext();
+  if (id === 'identitet') return [...getSoIdentitetLucktext(), ...getSoKonLucktext(), ...getSoLivssynLucktext(), ...getSoUtseendeLucktext()];
   return getKemiLucktext();
 }
 function showLucktext(topicId) {
@@ -3460,6 +3753,7 @@ let skState = { questions:[], idx:0 };
 
 function getSkrivfragorForTopic(id) {
   if (id === 'manniskokroppen') return getMkroppenSkrivfragor();
+  if (id === 'identitet') return getSoSkrivfragor();
   return getKemiSkrivfragor();
 }
 function showSkrivning(topicId) {
@@ -3547,11 +3841,8 @@ const PALATS_DATA = {
     { id:'mk-mats', icon:'🫁', name:'Matspjälkning', color:'#b85c38', bg:'#f5e3d6', terms:[{w:'Tolvfingertarmen',d:'Tar emot galla och bukspott – fortsatt nedbrytning'},{w:'Tunntarmen',d:'Tar upp näring via tarmludden – tennis­plans­stor yta'},{w:'Tjocktarmen',d:'Tar upp vatten och salter'},{w:'Galla',d:'Finfördela fett – bildas i levern'},{w:'Enzymer',d:'Saxar som klipper isär stora molekyler'}], link:'Munnen → magsäck → tolvfingertarm → tunntarm → tjocktarm → ändtarm' },
     { id:'mk-and', icon:'💨', name:'Andning', color:'#3a7d6e', bg:'#d9f0eb', terms:[{w:'Lungblåsor (alveoler)',d:'Platsen för gasutbyte – syre in, CO₂ ut'},{w:'Kapillärer',d:'Tunna blodkärl runt lungblåsorna'},{w:'Diafragma',d:'Stor andningsmuskel – suger in/pressar ut luft'},{w:'Diffusion',d:'Gaser rör sig från högt till lågt tryck'}], link:'Cellandning kräver syre → lungor tar in O₂ → CO₂ måste ut för att blodet inte ska bli surt' },
     { id:'mk-hjart', icon:'🫀', name:'Hjärtat & blodet', color:'#c0392b', bg:'#f9e0de', terms:[{w:'Lilla kretsloppet',d:'Hjärta ↔ lungor – blodet syresätts'},{w:'Stora kretsloppet',d:'Hjärta ↔ kroppen – syre levereras'},{w:'Röda blodkroppar',d:'Fraktar syre via hemoglobin'},{w:'Muskelpumpen',d:'Benmuskler pressar blod uppåt i venerna'},{w:'Aortan',d:'Kroppens största artär – lämnar vänster kammare'}], link:'Hjärtat = pumpen. Artärer = ut. Vener = in. Kapillärer = utbytet.' },
-    { id:'mk-blod', icon:'🩸', name:'Blodets innehåll', color:'#a93226', bg:'#fce8e6', terms:[{w:'Blodplasma (55%)',d:'Vätska med vatten, salt och näringsämnen'},{w:'Blodkroppar (45%)',d:'Röda, vita och blodplättar – bildas i benmärgen'},{w:'Hemoglobin',d:'Protein i röda blodkroppar som binder syre – innehåller järn'},{w:'Vita blodkroppar',d:'Immunförsvar – makrofager, T-celler, B-celler'},{w:'Fibrin',d:'Proteintrådar som bildar ett nät och täpper sår'}], link:'Blod = plasma + blodkroppar. Syre bunden till hemoglobin i röda blodkroppar.' },
-    { id:'mk-blodgrupp', icon:'🔬', name:'Blodgrupper', color:'#7b4f9e', bg:'#f0e8f8', terms:[{w:'Antigen',d:'Litet protein på röda blodkroppar – skiljer blodgrupper åt'},{w:'Antikropp',d:'Angriper "fel" antigener – finns i blodplasman'},{w:'Blodgrupp O',d:'Inga antigener – kan ge blod till alla (universell givare)'},{w:'Blodgrupp AB',d:'Båda antigenerna – kan ta emot från alla (universell mottagare)'}], link:'Regel: antikroppar attackerar antigener de inte känner igen. Felmatchning = farlig reaktion.' },
-    { id:'mk-rening', icon:'🫘', name:'Lever & njurar', color:'#2e6b5e', bg:'#d8f0eb', terms:[{w:'Leverns 4 uppgifter',d:'Rena blod, lagra glykogen, producera galla, lagra vitaminer'},{w:'Njurarnas 3 uppgifter',d:'Rena blodet, tillverka urin, reglera vätskebalansen'},{w:'Nefroner',d:'Njurarnas filterenheter – filtrerar blodet'},{w:'Glykogen',d:'Lagrad glukos i levern – snabb energireserv'}], link:'Levern = kemifabrik. Njurarna = reningsverk. Båda rensar blodet men på olika sätt.' },
-    { id:'mk-blodtryck', icon:'💓', name:'Blodtrycket', color:'#8b2252', bg:'#f5e0ec', terms:[{w:'Blodtryck',d:'Trycket i blodkärlen när hjärtat pumpar – mäts i mm Hg'},{w:'Normalt',d:'Under 140/90 mm Hg'},{w:'Högt (>140/90)',d:'Risk för stroke, hjärtattack, njurproblem'},{w:'Lågt (<90/60)',d:'Symptom: svimningskänsla, yr, kallsvettas, svag'}], link:'Högt tryck = sliter på kärlen. Lågt tryck = hjärnan får för lite blod.' },
   ],
+  'identitet': SO_PALATS,
 };
 
 let palatsCurrent = null;
@@ -3752,6 +4043,7 @@ let insState = { questions:[], idx:0, showingAnswer:false, filter:'all' };
 
 function getInstuderingForTopic(id) {
   if (id === 'manniskokroppen') return getMkroppenInstudering();
+  if (id === 'identitet') return getSoInstudering();
   return getKemiInstudering();
 }
 function showInstudering(topicId) {
@@ -4506,6 +4798,7 @@ let kState = { sets:[], setIdx:0, selected:{ left:null, right:null }, matched:ne
 
 function getKopplingarForTopic(id) {
   if (id === 'manniskokroppen') return getMkroppenKopplingar();
+  if (id === 'identitet') return getSoKopplingar();
   return getKemiKopplingar();
 }
 function showKoppling(topicId) {
